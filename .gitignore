@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+frontend/dist/
+build/
+*.egg-info/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+
+# Environment and IDE
+.env
+.env.local
+.DS_Store
+Thumbs.db
+*.log
+
+# Database (optional local scratch DB)
+# outcome_platform.db

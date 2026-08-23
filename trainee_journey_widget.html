@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trainee Journey & Follow-Up Protocol - National Skilling Outcomes Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Variables for Light and Dark Modes */
+    :root, [data-mode="light"] {
+      --surface-1: #ffffff;
+      --surface-2: #f8fafc;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --bg-accent: #f0fdf4;
+      --text-accent: #059669;
+      --text-success: #16a34a;
+      --bg-success: #dcfce7;
+      
+      /* Badge backgrounds in light mode */
+      --badge-green-bg: #ecfdf5;
+      --badge-green-text: #065f46;
+      --badge-teal-bg: #e6f7f2;
+      --badge-teal-text: #0d684d;
+      --badge-blue-bg: #ebf4fc;
+      --badge-blue-text: #1d5b9b;
+      --badge-amber-bg: #fdf5ea;
+      --badge-amber-text: #824f0c;
+    }
+
+    [data-mode="dark"] {
+      --surface-1: #0f172a;
+      --surface-2: #020617;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: #1e293b;
+      --border-strong: #334155;
+      --bg-accent: #022c22;
+      --text-accent: #34d399;
+      --text-success: #4ade80;
+      --bg-success: #052e16;
+
+      /* Badge backgrounds in dark mode */
+      --badge-green-bg: rgba(99, 153, 34, 0.2);
+      --badge-green-text: #8de347;
+      --badge-teal-bg: rgba(29, 158, 117, 0.18);
+      --badge-teal-text: #5cdbb5;
+      --badge-blue-bg: rgba(55, 138, 221, 0.18);
+      --badge-blue-text: #7cbbf7;
+      --badge-amber-bg: rgba(186, 117, 23, 0.18);
+      --badge-amber-text: #f0b567;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--surface-2);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2.5rem 1.25rem;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .journey-container {
+      width: 100%;
+      max-width: 1160px;
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    /* Top Bar & Theme Toggle */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .top-bar-title h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .top-bar-title p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    .theme-toggle-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+      padding: 0.45rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--text-muted);
+    }
+
+    /* Section 1: Lifecycle Flow Bar */
+    .lifecycle-flow-section {
+      margin-bottom: 2.5rem;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .flow-section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 0.85rem;
+    }
+
+    .flow-bar-container {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.65rem;
+    }
+
+    .flow-pill {
+      background: var(--surface-1);
+      border: 0.5px solid var(--border);
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+      padding: 5px 10px;
+      white-space: nowrap;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+      transition: border-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .flow-pill:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+    }
+
+    .flow-arrow {
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      user-select: none;
+    }
+
+    /* Main Two-Column Layout */
+    .journey-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 2.5rem;
+      align-items: start;
+      margin-bottom: 2.5rem;
+    }
+
+    .column-header {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 1.35rem;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Left Column: 6 Dot Rows */
+    .dot-rows-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .dot-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: 10px;
+      transition: background-color 0.15s ease;
+    }
+
+    .dot-row:hover {
+      background-color: var(--surface-2);
+    }
+
+    .dot-indicator {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      margin-top: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    .dot-content {
+      flex: 1;
+    }
+
+    .dot-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.35;
+      margin-bottom: 0.2rem;
+    }
+
+    .dot-description {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    /* Right Column: 4 Follow-up Protocol Badges */
+    .badge-cards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .badge-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.35rem;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .badge-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+    }
+
+    .badge-header {
+      margin-bottom: 0.65rem;
+    }
+
+    .pill-badge {
+      display: inline-block;
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .pill-badge.green {
+      background-color: var(--badge-green-bg);
+      color: var(--badge-green-text);
+      border: 1px solid rgba(99, 153, 34, 0.3);
+    }
+
+    .pill-badge.teal {
+      background-color: var(--badge-teal-bg);
+      color: var(--badge-teal-text);
+      border: 1px solid rgba(29, 158, 117, 0.25);
+    }
+
+    .pill-badge.blue {
+      background-color: var(--badge-blue-bg);
+      color: var(--badge-blue-text);
+      border: 1px solid rgba(55, 138, 221, 0.25);
+    }
+
+    .pill-badge.amber {
+      background-color: var(--badge-amber-bg);
+      color: var(--badge-amber-text);
+      border: 1px solid rgba(186, 117, 23, 0.25);
+    }
+
+    .badge-card-description {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    /* Action Footer Button */
+    .action-footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .send-prompt-btn {
+      background: var(--bg-accent);
+      color: var(--text-accent);
+      border: 1px solid var(--border-strong);
+      padding: 0.75rem 1.4rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .send-prompt-btn:hover {
+      background: var(--surface-2);
+      border-color: var(--text-accent);
+      transform: translateY(-1px);
+    }
+
+    .send-prompt-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Toast Notification for Prompt */
+    .toast-notification {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--surface-1);
+      color: var(--text-primary);
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      padding: 0.85rem 1.25rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      display: none;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 100;
+      animation: toastSlideIn 0.3s ease;
+    }
+
+    .toast-notification.show {
+      display: flex;
+    }
+
+    @keyframes toastSlideIn {
+      from { transform: translateY(15px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .journey-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .journey-container {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .flow-bar-container {
+        gap: 0.4rem;
+      }
+      .flow-pill {
+        font-size: 10px;
+        padding: 4px 8px;
+      }
+      .journey-container {
+        padding: 1.25rem;
+      }
+      .action-footer {
+        justify-content: stretch;
+      }
+      .send-prompt-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body data-mode="dark">
+
+  <div class="journey-container">
+    
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="top-bar-title">
+        <h1>Trainee Longitudinal Journey & Follow-Up Engine</h1>
+        <p>Adaptive multi-channel protocols and systemic barrier remediation</p>
+      </div>
+      <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">
+        <span id="themeBtnText">☀️ Light Mode</span>
+      </button>
+    </div>
+
+    <!-- Section 1: Lifecycle Flow Bar -->
+    <div class="lifecycle-flow-section">
+      <div class="flow-section-label">Longitudinal Lifecycle Sequence</div>
+      <div class="flow-bar-container">
+        <div class="flow-pill">Enrolment + consent</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-pill">Training + assessment</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-pill">Placement support</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-pill">3-mo follow-up</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-pill">6-mo follow-up</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-pill">12-mo follow-up</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-pill">24 / 36-mo impact</div>
+      </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="journey-grid">
+      
+      <!-- Section 2: Left Column (Problems trainees face — solved) -->
+      <div class="journey-column">
+        <div class="column-header">Problems trainees face — solved</div>
+        <div class="dot-rows-list">
+          
+          <!-- Purple Dot Row -->
+          <div class="dot-row">
+            <div class="dot-indicator" style="background-color: #7F77DD;"></div>
+            <div class="dot-content">
+              <div class="dot-title">Lost to follow-up when phone changes</div>
+              <div class="dot-description">Multi-token identity (Aadhaar token + name-DOB fuzzy match + last known employer) allows re-linkage even after SIM change. Field counsellors re-verify in person.</div>
+            </div>
+          </div>
+
+          <!-- Teal Dot Row -->
+          <div class="dot-row">
+            <div class="dot-indicator" style="background-color: #1D9E75;"></div>
+            <div class="dot-content">
+              <div class="dot-title">No portable skills credential</div>
+              <div class="dot-description">Trainee outcome card, a shareable QR-linked record showing certifications, employment history and verified wage history, works like a skills passport.</div>
+            </div>
+          </div>
+
+          <!-- Coral Dot Row -->
+          <div class="dot-row">
+            <div class="dot-indicator" style="background-color: #D85A30;"></div>
+            <div class="dot-content">
+              <div class="dot-title">Placed in wrong-fit jobs</div>
+              <div class="dot-description">Demand-signal integration from employers flags sector/role mismatches before placement. Re-skilling nudges trigger automatically if job is below training level.</div>
+            </div>
+          </div>
+
+          <!-- Blue Dot Row -->
+          <div class="dot-row">
+            <div class="dot-indicator" style="background-color: #378ADD;"></div>
+            <div class="dot-content">
+              <div class="dot-title">No grievance channel</div>
+              <div class="dot-description">In-app and IVR grievance logging during follow-up calls, escalation path to district officer, tracked to resolution with SLA timers.</div>
+            </div>
+          </div>
+
+          <!-- Green Dot Row -->
+          <div class="dot-row">
+            <div class="dot-indicator" style="background-color: #639922;"></div>
+            <div class="dot-content">
+              <div class="dot-title">Wage exploitation after placement</div>
+              <div class="dot-description">Wage benchmark alerts compare reported earnings against sector median at 6 and 12 months. Anomalies trigger counsellor outreach.</div>
+            </div>
+          </div>
+
+          <!-- Amber Dot Row -->
+          <div class="dot-row">
+            <div class="dot-indicator" style="background-color: #BA7517;"></div>
+            <div class="dot-content">
+              <div class="dot-title">Self-employed and gig workers invisible</div>
+              <div class="dot-description">Dedicated self-employment module captures business registration, GSTIN, UdyamCard, platform earnings (Swiggy, Urban Company API) and micro-enterprise credit access.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Section 3: Right Column (Follow-up protocol by channel) -->
+      <div class="journey-column">
+        <div class="column-header">Follow-up protocol by channel</div>
+        <div class="badge-cards-list">
+          
+          <!-- Green Badge Card (Tier 1) -->
+          <div class="badge-card">
+            <div class="badge-header">
+              <span class="pill-badge green">IVR / phone — tier 1</span>
+            </div>
+            <div class="badge-card-description">
+              Automated call at 3, 6, 12, 24 months. 8 questions max. Dual-language. Response logged and classified automatically. 72-hour retry if unanswered.
+            </div>
+          </div>
+
+          <!-- Teal Badge Card (Tier 2) -->
+          <div class="badge-card">
+            <div class="badge-header">
+              <span class="pill-badge teal">WhatsApp — tier 2</span>
+            </div>
+            <div class="badge-card-description">
+              Button-response survey if IVR unanswered after 2 attempts. Handles richer self-employment data, photo uploads of business, salary slips.
+            </div>
+          </div>
+
+          <!-- Blue Badge Card (Tier 3) -->
+          <div class="badge-card">
+            <div class="badge-header">
+              <span class="pill-badge blue">Counsellor app — tier 3</span>
+            </div>
+            <div class="badge-card-description">
+              Offline-capable Android app for field staff. GPS-verified home visit. Face-match re-verification. Handles trainees unreachable by digital means.
+            </div>
+          </div>
+
+          <!-- Amber Badge Card (Tier 4) -->
+          <div class="badge-card">
+            <div class="badge-header">
+              <span class="pill-badge amber">Administrative pull — tier 4</span>
+            </div>
+            <div class="badge-card-description">
+              For non-responders after 3 attempts: EPF/ESIC contribution lookup, UAN status, state employment exchange data — passive signal without burdening the trainee.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Action Footer Button -->
+    <div class="action-footer">
+      <button class="send-prompt-btn" onclick="sendPrompt('Design the trainee outcome card — what fields it should contain and how privacy is managed')">
+        Design trainee outcome card ↗
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast-notification">
+    <span>Prompt dispatched: "Design the trainee outcome card — what fields it should contain and how privacy is managed"</span>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      const currentMode = body.getAttribute('data-mode') || 'dark';
+      const newMode = currentMode === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-mode', newMode);
+      
+      const btnText = document.getElementById('themeBtnText');
+      if (btnText) {
+        btnText.textContent = newMode === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+      }
+    }
+
+    function sendPrompt(promptText) {
+      // Check if parent window or IDE accepts postMessage, or copy to clipboard and notify
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'SEND_PROMPT', prompt: promptText }, '*');
+      }
+      
+      // Copy to clipboard
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(promptText).catch(() => {});
+      }
+
+      // Show toast visual feedback
+      const toast = document.getElementById('toast');
+      if (toast) {
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3500);
+      }
+    }
+  </script>
+
+</body>
+</html>

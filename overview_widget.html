@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>National Longitudinal Skilling Outcomes Platform - Overview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Variables for Light and Dark Modes */
+    :root, [data-mode="light"] {
+      --surface-1: #ffffff;
+      --surface-2: #f8fafc;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --bg-accent: #f0fdf4;
+      --text-accent: #059669;
+      --text-success: #16a34a;
+      --bg-success: #dcfce7;
+      
+      /* Badge backgrounds in light mode */
+      --badge-teal-bg: #e6f7f2;
+      --badge-teal-text: #0d684d;
+      --badge-blue-bg: #ebf4fc;
+      --badge-blue-text: #1d5b9b;
+      --badge-purple-bg: #f2f1fc;
+      --badge-purple-text: #4e46a3;
+      --badge-amber-bg: #fdf5ea;
+      --badge-amber-text: #824f0c;
+    }
+
+    [data-mode="dark"] {
+      --surface-1: #0f172a;
+      --surface-2: #020617;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: #1e293b;
+      --border-strong: #334155;
+      --bg-accent: #022c22;
+      --text-accent: #34d399;
+      --text-success: #4ade80;
+      --bg-success: #052e16;
+
+      /* Badge backgrounds in dark mode */
+      --badge-teal-bg: rgba(29, 158, 117, 0.18);
+      --badge-teal-text: #5cdbb5;
+      --badge-blue-bg: rgba(55, 138, 221, 0.18);
+      --badge-blue-text: #7cbbf7;
+      --badge-purple-bg: rgba(127, 119, 221, 0.18);
+      --badge-purple-text: #b3aef5;
+      --badge-amber-bg: rgba(186, 117, 23, 0.18);
+      --badge-amber-text: #f0b567;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--surface-2);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2.5rem 1.25rem;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .platform-container {
+      width: 100%;
+      max-width: 1160px;
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    /* Top Bar & Theme Toggle */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .top-bar-title h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .top-bar-title p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    .theme-toggle-btn {
+      background: var(--surface-2);
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+      padding: 0.45rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--text-muted);
+    }
+
+    /* Metric Row (4 cards) */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .metric-card {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.35rem 1.5rem;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+      box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.05);
+    }
+
+    .metric-value {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .metric-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-top: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Two-Column Overview Layout */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .column-header {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 1.35rem;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Left Column: 6 Dot Rows */
+    .dot-rows-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .dot-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: 10px;
+      transition: background-color 0.15s ease;
+    }
+
+    .dot-row:hover {
+      background-color: var(--surface-2);
+    }
+
+    .dot-indicator {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      margin-top: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    .dot-content {
+      flex: 1;
+    }
+
+    .dot-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.35;
+      margin-bottom: 0.2rem;
+    }
+
+    .dot-description {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    /* Right Column: 4 Badge Cards */
+    .badge-cards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .badge-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.35rem;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .badge-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+    }
+
+    .badge-header {
+      margin-bottom: 0.65rem;
+    }
+
+    .pill-badge {
+      display: inline-block;
+      padding: 0.3rem 0.7rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .pill-badge.teal {
+      background-color: var(--badge-teal-bg);
+      color: var(--badge-teal-text);
+      border: 1px solid rgba(29, 158, 117, 0.25);
+    }
+
+    .pill-badge.blue {
+      background-color: var(--badge-blue-bg);
+      color: var(--badge-blue-text);
+      border: 1px solid rgba(55, 138, 221, 0.25);
+    }
+
+    .pill-badge.purple {
+      background-color: var(--badge-purple-bg);
+      color: var(--badge-purple-text);
+      border: 1px solid rgba(127, 119, 221, 0.25);
+    }
+
+    .pill-badge.amber {
+      background-color: var(--badge-amber-bg);
+      color: var(--badge-amber-text);
+      border: 1px solid rgba(186, 117, 23, 0.25);
+    }
+
+    .badge-card-description {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .metric-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .overview-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .platform-container {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+      .platform-container {
+        padding: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body data-mode="dark">
+
+  <div class="platform-container">
+    
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="top-bar-title">
+        <h1>National Longitudinal Skilling-Outcomes Platform</h1>
+        <p>Architectural Overview & Outcome Verification Framework</p>
+      </div>
+      <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">
+        <span id="themeBtnText">☀️ Light Mode</span>
+      </button>
+    </div>
+
+    <!-- Metric Row (4 cards) -->
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-value">7</div>
+        <div class="metric-label">System layers</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">24</div>
+        <div class="metric-label">Core modules</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">5</div>
+        <div class="metric-label">Stakeholder types</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">36mo</div>
+        <div class="metric-label">Tracking horizon</div>
+      </div>
+    </div>
+
+    <!-- Overview Grid -->
+    <div class="overview-grid">
+      
+      <!-- Left Column: What this system does (6 dot-rows) -->
+      <div class="overview-column">
+        <div class="column-header">What this system does</div>
+        <div class="dot-rows-list">
+          
+          <!-- Purple Dot Row -->
+          <div class="dot-row">
+            <div class="dot-indicator" style="background-color: #7F77DD;"></div>
+            <div class="dot-content">
+              <div class="dot-title">Consent-based longitudinal identity</div>
+              <div class="dot-description">Persistent trainee ID across programmes, phone changes, and geography using Aadhaar token plus fuzzy biographic match, never raw biometrics.</div>
+            </div>
+          </div>
+
+          <!-- Teal Dot Row -->
+          <div class="dot-row">
+            <div class="dot-indicator" style="background-color: #1D9E75;"></div>
+            <div class="dot-content">
+              <div class="dot-title">Multi-channel automated follow-up</div>
+              <div class="dot-description">IVR, WhatsApp, SMS and field counsellor app adapts channel by response rate, covering employed, self-employed, apprentice and dropout outcomes.</div>
+            </div>
+          </div>
+
+          <!-- Coral Dot Row -->
+          <div class="dot-row">
+            <div class="dot-indicator" style="background-color: #D85A30;"></div>
+            <div class="dot-content">
+              <div class="dot-title">Administrative signal validation</div>
+              <div class="dot-description">EPF/ESIC contribution cross-checks, UAN lookup and DigiLocker certificate verification replace self-reported employer data with ground truth.</div>
+            </div>
+          </div>
+
+          <!-- Blue Dot Row -->
+          <div class="dot-row">
+            <div class="dot-indicator" style="background-color: #378ADD;"></div>
+            <div class="dot-content">
+              <div class="dot-title">Wage and retention progression</div>
+              <div class="dot-description">Tracks earnings and job continuity at 3, 6, 12, 24 and 36 months, not just placement at day zero.</div>
+            </div>
+          </div>
+
+          <!-- Green Dot Row -->
+          <div class="dot-row">
+            <div class="dot-indicator" style="background-color: #639922;"></div>
+            <div class="dot-content">
+              <div class="dot-title">Skill-gap and attrition diagnosis</div>
+              <div class="dot-description">Classifies non-placement and dropout by root cause: demand-side, supply-side, geographic, or personal, enabling targeted remediation.</div>
+            </div>
+          </div>
+
+          <!-- Amber Dot Row -->
+          <div class="dot-row">
+            <div class="dot-indicator" style="background-color: #BA7517;"></div>
+            <div class="dot-content">
+              <div class="dot-title">Evidence-based policy outputs</div>
+              <div class="dot-description">Cohort, course, provider, district and demographic analytics with open-data portal, ministerial dashboard and individual trainee cards.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right Column: Who benefits (4 badge cards) -->
+      <div class="overview-column">
+        <div class="column-header">Who benefits</div>
+        <div class="badge-cards-list">
+          
+          <!-- Teal Badge Card -->
+          <div class="badge-card">
+            <div class="badge-header">
+              <span class="pill-badge teal">Trainee / employee</span>
+            </div>
+            <div class="badge-card-description">
+              Portable outcome record, grievance channel, re-skilling nudges, wage benchmarks, and career counselling triggers when employment stalls.
+            </div>
+          </div>
+
+          <!-- Blue Badge Card -->
+          <div class="badge-card">
+            <div class="badge-header">
+              <span class="pill-badge blue">Employer</span>
+            </div>
+            <div class="badge-card-description">
+              Verified candidate quality signal, apprenticeship subsidy claims simplified, retention analytics, and demand-signal integration for future cohort planning.
+            </div>
+          </div>
+
+          <!-- Purple Badge Card -->
+          <div class="badge-card">
+            <div class="badge-header">
+              <span class="pill-badge purple">Training provider</span>
+            </div>
+            <div class="badge-card-description">
+              Outcome-linked performance scores, benchmark against peers, course improvement recommendations, and protected appeal process for anomalies.
+            </div>
+          </div>
+
+          <!-- Amber Badge Card -->
+          <div class="badge-card">
+            <div class="badge-header">
+              <span class="pill-badge amber">Ministry / district</span>
+            </div>
+            <div class="badge-card-description">
+              Real-time placement dashboards, fund-flow linked to validated outcomes, skill-gap maps, and evidence base for policy revision.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      const currentMode = body.getAttribute('data-mode') || 'dark';
+      const newMode = currentMode === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-mode', newMode);
+      
+      const btnText = document.getElementById('themeBtnText');
+      if (btnText) {
+        btnText.textContent = newMode === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+      }
+    }
+  </script>
+
+</body>
+</html>
