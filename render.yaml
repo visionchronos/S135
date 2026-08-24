@@ -48,4 +48,4 @@ services:
     envVars:
       # Must be a full URL with /api suffix — "host" property gives bare hostname
       - key: VITE_API_BASE_URL
-        value: "https://nexus-backend.onrender.com/api"
+        value: "https://s135.onrender.com/api"
