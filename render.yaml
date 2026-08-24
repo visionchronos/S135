@@ -9,13 +9,7 @@ services:
     plan: free
     pythonVersion: "3.11.0"
     buildCommand: pip install -r backend/requirements.txt
-    # Module path: run from repo root, so package is backend.app.main
-    startCommand: >-
-      uvicorn backend.app.main:app
-      --host 0.0.0.0
-      --port $PORT
-      --workers 1
-      --log-level info
+    startCommand: "uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT --workers 1 --log-level info"
     healthCheckPath: /api/health
     envVars:
       - key: ENVIRONMENT
