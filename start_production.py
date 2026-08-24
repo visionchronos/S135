@@ -38,14 +38,21 @@ if os.path.exists(DIST_DIR):
         return FileResponse(os.path.join(DIST_DIR, "index.html"))
 
 if __name__ == "__main__":
+    if hasattr(sys.stdout, "reconfigure"):
+        try:
+            sys.stdout.reconfigure(encoding="utf-8")
+        except Exception:
+            pass
+
     host = settings.HOST if settings.HOST != "0.0.0.0" else "127.0.0.1"
     port = settings.PORT
     print("=" * 70)
-    print(f"🚀 Starting {settings.APP_NAME}")
-    print(f"🔒 Environment: {settings.ENVIRONMENT} | PII Masking: {'ENABLED' if settings.MASK_PII else 'DISABLED'}")
-    print(f"🌐 Server running at: http://{host}:{port}")
-    print(f"📚 API Docs: http://{host}:{port}/docs")
+    print(f"[STARTING] {settings.APP_NAME}")
+    print(f"[SECURITY] Environment: {settings.ENVIRONMENT} | PII Masking: {'ENABLED' if settings.MASK_PII else 'DISABLED'}")
+    print(f"[SERVER] Running at: http://{host}:{port}")
+    print(f"[DOCS] API Docs: http://{host}:{port}/docs")
     print("=" * 70)
+
 
     uvicorn.run(
         "start_production:app",
