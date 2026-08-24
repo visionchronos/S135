@@ -93,7 +93,34 @@ In **Project Settings -> Environment Variables**, configure:
 
 ---
 
-### Option 2: One-Click Production Run (Local / VM Server)
+### 🔥 Option 2: Deploy to Firebase Hosting
+
+The platform is pre-configured with [`firebase.json`](file:///g:/Program%20Files/hackathon/S135/firebase.json) and [`.firebaserc`](file:///g:/Program%20Files/hackathon/S135/.firebaserc) for Google Firebase Hosting.
+
+#### Step 1: Install Firebase CLI & Login
+```bash
+npm install -g firebase-tools
+firebase login
+```
+
+#### Step 2: Build the Frontend Assets
+```bash
+cd frontend && npm run build && cd ..
+```
+
+#### Step 3: Deploy to Firebase
+```bash
+# Initialize / Select your project (if not done yet)
+firebase use --add
+
+# Deploy to Firebase Hosting
+firebase deploy --only hosting
+```
+> Your app will be live at `https://<your-firebase-project-id>.web.app` and `https://<your-firebase-project-id>.firebaseapp.com`.
+
+---
+
+### Option 3: One-Click Production Run (Local / VM Server)
 
 For instant bare-metal or cloud VM deployment without requiring Docker:
 
