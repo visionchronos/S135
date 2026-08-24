@@ -1,0 +1,8 @@
+{
+  "name": "s135-vikasdrishti",
+  "private": true,
+  "description": "VikasDrishti – NEXUS Longitudinal Outcome Intelligence Platform (monorepo root)",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

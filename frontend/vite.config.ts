@@ -13,5 +13,20 @@ export default defineConfig({
         changeOrigin: true
       }
     }
+  },
+  build: {
+    // Raise the warning threshold — we acknowledge the large bundle
+    chunkSizeWarningLimit: 800,
+    rollupOptions: {
+      output: {
+        // Split large vendor libs into separate cacheable chunks
+        manualChunks: {
+          'vendor-charts': ['recharts'],
+          'vendor-icons': ['lucide-react'],
+          'vendor-state': ['zustand'],
+          'vendor-http': ['axios'],
+        }
+      }
+    }
   }
 });

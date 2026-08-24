@@ -1,12 +1,21 @@
 services:
-  # FastAPI Backend Web Service
+  # ============================================================
+  # FastAPI Backend — Render Web Service (Python)
+  # ============================================================
   - type: web
     name: nexus-backend
     env: python
     region: oregon
-    plan: standard
+    plan: free
+    pythonVersion: "3.11.0"
     buildCommand: pip install -r backend/requirements.txt
-    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT --workers 2
+    # Module path: run from repo root, so package is backend.app.main
+    startCommand: >-
+      uvicorn backend.app.main:app
+      --host 0.0.0.0
+      --port $PORT
+      --workers 1
+      --log-level info
     healthCheckPath: /api/health
     envVars:
       - key: ENVIRONMENT
@@ -19,22 +28,30 @@ services:
         value: "True"
       - key: SECRET_KEY
         generateValue: true
+      # Render ephemeral disk — write DB to /tmp so it persists within a session
+      - key: DATABASE_URL
+        value: "sqlite:////tmp/outcome_platform.db"
+      # Keep seed count small so the health-check doesn't time out on cold start.
+      # Render free tier health-check timeout ≈ 3 min; 500 records seed in ~15s.
+      - key: SEED_COUNT
+        value: "500"
+      # Allow the frontend static site to call this backend
       - key: CORS_ORIGINS
-        value: "*"
+        value: "https://nexus-frontend.onrender.com"
 
-  # React Frontend Static Site
+  # ============================================================
+  # React Frontend — Render Static Site
+  # ============================================================
   - type: static_site
     name: nexus-frontend
     region: oregon
-    buildCommand: cd frontend && npm install && npm run build
-    publishPath: frontend/dist
+    buildCommand: cd frontend && npm ci && npm run build
+    publishDir: frontend/dist
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
     envVars:
+      # Must be a full URL with /api suffix — "host" property gives bare hostname
       - key: VITE_API_BASE_URL
-        fromService:
-          type: web
-          name: nexus-backend
-          property: host
+        value: "https://nexus-backend.onrender.com/api"

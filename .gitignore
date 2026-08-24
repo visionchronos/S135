@@ -11,6 +11,8 @@ frontend/dist/
 build/
 *.tsbuildinfo
 .eslintcache
+# Root package-lock.json is a near-empty stub — ignore it to avoid confusion
+/package-lock.json
 
 # --- Python & Backend ---
 __pycache__/

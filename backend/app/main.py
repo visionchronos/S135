@@ -18,10 +18,12 @@ from .api.demo import router as demo_router
 async def lifespan(app: FastAPI):
     # Initialize DB schema
     Base.metadata.create_all(bind=engine)
-    # Seed database with synthetic records with longitudinal lifecycles
+    # Seed database with synthetic records.
+    # SEED_COUNT is controlled via env var (default 500 for Render free tier
+    # to stay well within the 3-minute health-check window).
     db = SessionLocal()
     try:
-        seed_database_if_empty(db, force_reset=False, count=10000)
+        seed_database_if_empty(db, force_reset=False, count=settings.SEED_COUNT)
     finally:
         db.close()
     yield
@@ -75,4 +77,3 @@ def health_check():
         "version": settings.APP_VERSION,
         "environment": settings.ENVIRONMENT
     }
-

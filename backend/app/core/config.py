@@ -6,27 +6,32 @@ class Settings(BaseSettings):
     # App Information
     APP_NAME: str = "NEXUS Longitudinal Outcome Intelligence Platform (VikasDrishti)"
     APP_VERSION: str = "2.0.0"
-    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "production") # production | development | staging
-    DEBUG: bool = os.getenv("DEBUG", "False").lower() in ("true", "1", "yes")
+    ENVIRONMENT: str = "production"
+    DEBUG: bool = False
 
     # Server Configuration
-    HOST: str = os.getenv("HOST", "0.0.0.0")
-    PORT: int = int(os.getenv("PORT", "8000"))
-    WORKERS: int = int(os.getenv("WORKERS", "2"))
+    HOST: str = "0.0.0.0"
+    PORT: int = 8000
+    WORKERS: int = 1
 
     # Security & Privacy
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "nexus-super-secret-key-change-in-production-2026")
-    MASK_PII: bool = os.getenv("MASK_PII", "True").lower() in ("true", "1", "yes")
-    DOCS_ENABLED: bool = os.getenv("DOCS_ENABLED", "True").lower() in ("true", "1", "yes")
+    SECRET_KEY: str = "nexus-super-secret-key-change-in-production-2026"
+    MASK_PII: bool = True
+    DOCS_ENABLED: bool = True
 
-    # Database (auto-detects Vercel /tmp writable filesystem when using SQLite)
-    DATABASE_URL: str = os.getenv(
-        "DATABASE_URL",
-        "sqlite:////tmp/outcome_platform.db" if os.getenv("VERCEL") else "sqlite:///./outcome_platform.db"
-    )
+    # Database
+    # On Render the CWD is the repo root and the filesystem is ephemeral.
+    # Use /tmp so SQLite has a guaranteed writable path.
+    # On Vercel, /tmp is also the writable path.
+    # Locally, fall back to ./outcome_platform.db.
+    DATABASE_URL: str = "sqlite:///./outcome_platform.db"
 
-    # CORS Origins
-    CORS_ORIGINS: str = os.getenv("CORS_ORIGINS", "*")
+    # Number of synthetic trainee records to seed on first boot.
+    # Keep this low (≤ 500) on Render free tier to avoid health-check timeout.
+    SEED_COUNT: int = 500
+
+    # CORS Origins — comma-separated list or "*"
+    CORS_ORIGINS: str = "*"
 
     @property
     def cors_origin_list(self) -> List[str]:
@@ -34,9 +39,10 @@ class Settings(BaseSettings):
             return ["*"]
         return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        extra = "ignore"
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "extra": "ignore",
+    }
 
 settings = Settings()
