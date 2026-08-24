@@ -86,7 +86,8 @@ COURSE_TEMPLATES = [
 
 def seed_database_if_empty(db: Session, force_reset: bool = False, count: int = 10000):
     existing_trainees = db.query(Trainee).count()
-    if existing_trainees >= 5000 and not force_reset:
+    # Skip seeding if ANY trainees already exist (avoids duplicate unique-key crash on Render restarts)
+    if existing_trainees >= 1 and not force_reset:
         print(f"[DataGen] Database already contains {existing_trainees} trainees. Skipping generation.")
         return
 
@@ -146,7 +147,7 @@ def seed_database_if_empty(db: Session, force_reset: bool = False, count: int = 
         # Add anomaly for Provider #14 (Suspiciously inflated reported placement)
         data_quality = 74.0 if i == 14 else round(random.uniform(88.0, 98.0), 1)
         prov = Provider(
-            code=f"TP-2026-{1000+i}",
+            code=f"TP-2026-{1000+i}-{uuid.uuid4().hex[:4]}",
             name=name,
             category="NSDC Partner" if i % 2 == 0 else "State Skill Mission Partner",
             state=dist_info["state"],
@@ -165,7 +166,7 @@ def seed_database_if_empty(db: Session, force_reset: bool = False, count: int = 
             dist_info = DISTRICTS_DATA[(i * 2 + c_idx) % len(DISTRICTS_DATA)]
             centre = TrainingCentre(
                 provider_id=prov.id,
-                code=f"TC-{prov.code}-{c_idx+1}",
+                code=f"TC-{prov.code}-{c_idx+1}-{uuid.uuid4().hex[:4]}",
                 name=f"{prov.name} - {dist_info['district']} Center",
                 state=dist_info["state"],
                 district=dist_info["district"],
@@ -191,7 +192,7 @@ def seed_database_if_empty(db: Session, force_reset: bool = False, count: int = 
             suffix = f" Level {tmpl['level']}" if v == 0 else f" (Specialization {v})"
             course = Course(
                 programme_id=prog_stt.id if v % 2 == 0 else prog_appr.id,
-                qp_code=f"{tmpl['qp']}-v{v+1}",
+                qp_code=f"{tmpl['qp']}-v{v+1}-{uuid.uuid4().hex[:4]}",
                 name=f"{tmpl['name']}{suffix}",
                 sector=tmpl["sector"],
                 nsqf_level=tmpl["level"],
@@ -280,7 +281,7 @@ def seed_database_if_empty(db: Session, force_reset: bool = False, count: int = 
             provider_id=prov.id,
             centre_id=centre.id,
             course_id=course_obj.id,
-            batch_code=f"BAT-2025-{1000 + b_idx}",
+            batch_code=f"BAT-2025-{1000 + b_idx}-{uuid.uuid4().hex[:6]}",
             start_date=b_start,
             end_date=b_end,
             status="COMPLETED"
@@ -335,7 +336,9 @@ def seed_database_if_empty(db: Session, force_reset: bool = False, count: int = 
             current_status = "UNPLACED"
             
         t_id = str(uuid.uuid4())
-        skill_id = f"SKILL-IND-{2025}-{100000 + i}"
+        # Include a random suffix so skill_id stays unique even if the seeder runs
+        # again with the same random.seed(42) deterministic sequence (e.g. Render restart).
+        skill_id = f"SKILL-IND-{2025}-{100000 + i}-{uuid.uuid4().hex[:6]}"
         
         trainee = Trainee(
             id=t_id,
@@ -399,7 +402,7 @@ def seed_database_if_empty(db: Session, force_reset: bool = False, count: int = 
         # Add Certification
         db.add(Certification(
             trainee_id=t_id,
-            certificate_number=f"CERT-NCVET-{2025}-{200000 + i}",
+            certificate_number=f"CERT-NCVET-{2025}-{200000 + i}-{uuid.uuid4().hex[:6]}",
             issue_date=batch_obj.end_date + timedelta(days=10),
             nsqf_level=tmpl["level"],
             credential_uri=f"https://credentials.gov.in/verify/CERT-NCVET-{2025}-{200000 + i}",
@@ -610,7 +613,7 @@ def seed_database_if_empty(db: Session, force_reset: bool = False, count: int = 
     # Closed-loop Intervention (Demonstrating measured cohort improvement)
     interv1 = Intervention(
         recommendation_id=rec1.id,
-        code="INTV-2025-001",
+        code=f"INTV-2025-001-{uuid.uuid4().hex[:6]}",
         title="MIS & Communication Bridge Bootcamp Pilot",
         intervention_type="CURRICULUM_UPGRADE",
         target_course_id=courses[1][0].id,
