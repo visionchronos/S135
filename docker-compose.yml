@@ -1,0 +1,57 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: nexus-backend:2.0.0
+    container_name: nexus_backend
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=production
+      - DEBUG=False
+      - HOST=0.0.0.0
+      - PORT=8000
+      - WORKERS=2
+      - SECRET_KEY=${SECRET_KEY:-nexus-production-secret-key-replace-in-env-2026}
+      - DATABASE_URL=sqlite:////app/data/outcome_platform.db
+      - MASK_PII=${MASK_PII:-True}
+      - DOCS_ENABLED=${DOCS_ENABLED:-True}
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
+    volumes:
+      - nexus_data:/app/data
+    networks:
+      - nexus_internal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    image: nexus-frontend:2.0.0
+    container_name: nexus_frontend
+    restart: unless-stopped
+    ports:
+      - "${PORT:-80}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - nexus_internal
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  nexus_data:
+    driver: local
+
+networks:
+  nexus_internal:
+    driver: bridge

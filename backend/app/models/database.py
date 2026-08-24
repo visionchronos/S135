@@ -1,8 +1,9 @@
-import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
+from ..core.config import settings
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./outcome_platform.db")
+DATABASE_URL = settings.DATABASE_URL
+
 
 # Enable WAL mode and foreign key enforcement for SQLite
 if DATABASE_URL.startswith("sqlite"):

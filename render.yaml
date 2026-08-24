@@ -1,0 +1,40 @@
+services:
+  # FastAPI Backend Web Service
+  - type: web
+    name: nexus-backend
+    env: python
+    region: oregon
+    plan: standard
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT --workers 2
+    healthCheckPath: /api/health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "False"
+      - key: MASK_PII
+        value: "True"
+      - key: DOCS_ENABLED
+        value: "True"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: "*"
+
+  # React Frontend Static Site
+  - type: static_site
+    name: nexus-frontend
+    region: oregon
+    buildCommand: cd frontend && npm install && npm run build
+    publishPath: frontend/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: nexus-backend
+          property: host

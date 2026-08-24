@@ -2,6 +2,8 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from ..models.database import get_db
+from ..core.config import settings
+from ..core.security import mask_phone, mask_email
 from ..models.schema import (
     Trainee, Batch, Course, Provider, Certification, EmploymentRecord,
     WageRecord, FollowUpSchedule, FollowUpResponse, TraineeConsent, ModelPredictionLog
@@ -62,7 +64,11 @@ def list_trainees(
     }
 
 @router.get("/{skill_or_id}")
-def get_trainee_detail(skill_or_id: str, db: Session = Depends(get_db)):
+def get_trainee_detail(
+    skill_or_id: str, 
+    unmask: bool = Query(False, description="Requires privileged role in production"),
+    db: Session = Depends(get_db)
+):
     trainee = db.query(Trainee).filter(
         (Trainee.id == skill_or_id) | (Trainee.skill_id == skill_or_id)
     ).first()
@@ -81,6 +87,10 @@ def get_trainee_detail(skill_or_id: str, db: Session = Depends(get_db)):
     consents = db.query(TraineeConsent).filter(TraineeConsent.trainee_id == trainee.id).all()
     predictions = db.query(ModelPredictionLog).filter(ModelPredictionLog.trainee_id == trainee.id).all()
 
+    should_mask = settings.MASK_PII and not unmask
+    phone_display = mask_phone(trainee.primary_phone) if should_mask else trainee.primary_phone
+    email_display = mask_email(trainee.email) if should_mask else trainee.email
+
     return {
         "id": trainee.id,
         "skill_id": trainee.skill_id,
@@ -88,8 +98,8 @@ def get_trainee_detail(skill_or_id: str, db: Session = Depends(get_db)):
         "gender": trainee.gender,
         "dob": trainee.dob,
         "social_category": trainee.social_category,
-        "primary_phone": trainee.primary_phone,
-        "email": trainee.email,
+        "primary_phone": phone_display,
+        "email": email_display,
         "district": trainee.district,
         "state": trainee.state,
         "education_level": trainee.education_level,
@@ -97,6 +107,7 @@ def get_trainee_detail(skill_or_id: str, db: Session = Depends(get_db)):
         "current_status": trainee.current_status,
         "data_quality_score": trainee.data_quality_score,
         "identity_confidence": trainee.identity_confidence,
+        "is_pii_masked": should_mask,
         "training": {
             "course_name": course.name if course else "N/A",
             "sector": course.sector if course else "N/A",

@@ -3,6 +3,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .models.database import engine, Base, SessionLocal
 from .services.data_generator import seed_database_if_empty
+from .core.config import settings
+from .core.security import SecurityHeadersMiddleware
 
 from .api.trainees import router as trainees_router
 from .api.intelligence import router as intelligence_router
@@ -16,7 +18,7 @@ from .api.demo import router as demo_router
 async def lifespan(app: FastAPI):
     # Initialize DB schema
     Base.metadata.create_all(bind=engine)
-    # Seed database with 10,000 synthetic records with longitudinal lifecycles
+    # Seed database with synthetic records with longitudinal lifecycles
     db = SessionLocal()
     try:
         seed_database_if_empty(db, force_reset=False, count=10000)
@@ -25,17 +27,24 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(
-    title="NEXUS Outcome Intelligence Platform (VikasDrishti)",
+    title=settings.APP_NAME,
     description="Longitudinal Skilling Outcomes & Impact Measurement Platform with Closed-Loop Policy Learning",
-    version="2.0.0",
+    version=settings.APP_VERSION,
+    docs_url="/docs" if settings.DOCS_ENABLED else None,
+    redoc_url="/redoc" if settings.DOCS_ENABLED else None,
+    openapi_url="/openapi.json" if settings.DOCS_ENABLED else None,
     lifespan=lifespan
 )
 
+# Custom Security Headers Middleware (strips fingerprinted headers & injects CSP / X-Frame-Options)
+app.add_middleware(SecurityHeadersMiddleware)
+
+# Environment-aware CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.cors_origin_list,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -51,12 +60,19 @@ app.include_router(demo_router)
 @app.get("/")
 def root():
     return {
-        "system": "NEXUS Longitudinal Outcome Intelligence Platform",
-        "version": "2.0.0",
+        "system": settings.APP_NAME,
+        "version": settings.APP_VERSION,
+        "environment": settings.ENVIRONMENT,
         "status": "ONLINE",
-        "docs_url": "/docs"
+        "docs_url": "/docs" if settings.DOCS_ENABLED else "RESTRICTED"
     }
 
 @app.get("/api/health")
 def health_check():
-    return {"status": "healthy", "service": "NEXUS-SkillOutcome-Backend"}
+    return {
+        "status": "healthy",
+        "service": "NEXUS-SkillOutcome-Backend",
+        "version": settings.APP_VERSION,
+        "environment": settings.ENVIRONMENT
+    }
+
