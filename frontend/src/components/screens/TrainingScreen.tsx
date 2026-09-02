@@ -23,8 +23,9 @@ interface CourseOverviewData {
 }
 
 export const TrainingScreen: React.FC = () => {
-  const { selectedCourseId, navigateToCourse, navigateToAction } = useFilterStore();
+  const { selectedCourseId, navigateToCourse } = useFilterStore();
   const [selectedCourse, setSelectedCourse] = useState<CourseOverviewData | null>(null);
+  const [isInterventionDeployed, setIsInterventionDeployed] = useState(false);
 
   const courses: CourseOverviewData[] = [
     {
@@ -122,28 +123,28 @@ export const TrainingScreen: React.FC = () => {
         <div className="space-y-6">
           <button
             onClick={() => setSelectedCourse(null)}
-            className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors cursor-pointer px-3 py-1.5 rounded-lg bg-[#0e1626] border border-slate-800"
+            className="flex items-center gap-2 text-xs font-bold text-[#0a66c2] hover:bg-[#e8f3fc] dark:hover:bg-[#0a66c2]/20 transition-colors cursor-pointer px-3.5 py-1.5 rounded-full border border-[#0a66c2]/40"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Back to Training Catalog</span>
           </button>
 
           {/* Top Overview Card */}
-          <div className="p-6 sm:p-7 rounded-2xl border border-slate-800/90 bg-gradient-to-br from-[#0e1626] via-[#0b1322] to-[#070c16] space-y-6 shadow-xl">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
+          <div className="linkedin-card p-6 sm:p-7 bg-white dark:bg-[#1b1f23] space-y-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-5">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/25">
+                  <span className="text-[11px] font-mono font-bold text-[#0a66c2] bg-[#e8f3fc] dark:bg-[#0a66c2]/20 px-2 py-0.5 rounded border border-[#0a66c2]/30">
                     {selectedCourse.qpCode}
                   </span>
-                  <span className="text-xs text-slate-400 font-semibold">• NSQF Level {selectedCourse.nsqfLevel} • {selectedCourse.sector}</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">• NSQF Level {selectedCourse.nsqfLevel} • {selectedCourse.sector}</span>
                 </div>
-                <h1 className="text-2xl font-black text-white mt-1.5">{selectedCourse.name}</h1>
+                <h1 className="text-2xl font-black text-slate-900 dark:text-white mt-1.5">{selectedCourse.name}</h1>
               </div>
               <span className={`text-xs font-bold px-3 py-1 rounded-full border ${
                 selectedCourse.status === 'good'
-                  ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                  : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                  ? 'bg-emerald-50 text-[#057642] border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300'
+                  : 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300'
               }`}>
                 {selectedCourse.status === 'good' ? 'Benchmark Achieved' : 'Action Required'}
               </span>
@@ -151,21 +152,21 @@ export const TrainingScreen: React.FC = () => {
 
             {/* 4 Outcome Numbers */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-              <div className="p-4 rounded-xl bg-[#090e18] border border-slate-800">
-                <span className="text-xs font-bold text-slate-400 block uppercase tracking-wider">Enrolled</span>
-                <span className="text-2xl font-black text-white mt-1 block">{selectedCourse.trainees}</span>
+              <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 block uppercase tracking-wider">Enrolled</span>
+                <span className="text-2xl font-black text-slate-900 dark:text-white mt-1 block">{selectedCourse.trainees}</span>
               </div>
-              <div className="p-4 rounded-xl bg-[#090e18] border border-slate-800">
-                <span className="text-xs font-bold text-slate-400 block uppercase tracking-wider">Certified</span>
-                <span className="text-2xl font-black text-cyan-400 mt-1 block">{selectedCourse.certifiedPct}%</span>
+              <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 block uppercase tracking-wider">Certified</span>
+                <span className="text-2xl font-black text-[#0a66c2] mt-1 block">{selectedCourse.certifiedPct}%</span>
               </div>
-              <div className="p-4 rounded-xl bg-[#090e18] border border-slate-800">
-                <span className="text-xs font-bold text-slate-400 block uppercase tracking-wider">Placement Rate</span>
-                <span className="text-2xl font-black text-emerald-400 mt-1 block">{selectedCourse.gotJobsPct}%</span>
+              <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 block uppercase tracking-wider">Placement Rate</span>
+                <span className="text-2xl font-black text-[#057642] mt-1 block">{selectedCourse.gotJobsPct}%</span>
               </div>
-              <div className="p-4 rounded-xl bg-[#090e18] border border-slate-800">
-                <span className="text-xs font-bold text-slate-400 block uppercase tracking-wider">6M Retention</span>
-                <span className="text-2xl font-black text-teal-300 mt-1 block">{selectedCourse.retentionPct}%</span>
+              <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 block uppercase tracking-wider">6M Retention</span>
+                <span className="text-2xl font-black text-teal-600 dark:text-teal-400 mt-1 block">{selectedCourse.retentionPct}%</span>
               </div>
             </div>
           </div>
@@ -174,15 +175,15 @@ export const TrainingScreen: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* What is working */}
-            <div className="p-6 rounded-2xl border border-slate-800/90 bg-[#0e1626]/80 backdrop-blur-md space-y-4 shadow-lg">
+            <div className="linkedin-card p-6 bg-white dark:bg-[#1b1f23] space-y-4">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-                <h3 className="text-base font-extrabold text-white">Cohort Strengths</h3>
+                <CheckCircle2 className="h-5 w-5 text-[#057642]" />
+                <h3 className="text-base font-black text-slate-900 dark:text-white">Cohort Strengths</h3>
               </div>
-              <div className="space-y-2 text-xs text-slate-300">
+              <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
                 {selectedCourse.workingPoints.map((pt, i) => (
-                  <div key={i} className="p-3 rounded-xl bg-[#090e18] border border-slate-800/80 flex items-start gap-2.5">
-                    <Check className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <div key={i} className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-start gap-2.5">
+                    <Check className="h-4 w-4 text-[#057642] shrink-0 mt-0.5" />
                     <span>{pt}</span>
                   </div>
                 ))}
@@ -190,15 +191,15 @@ export const TrainingScreen: React.FC = () => {
             </div>
 
             {/* What needs attention */}
-            <div className="p-6 rounded-2xl border border-slate-800/90 bg-[#0e1626]/80 backdrop-blur-md space-y-4 shadow-lg">
+            <div className="linkedin-card p-6 bg-white dark:bg-[#1b1f23] space-y-4">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-amber-400" />
-                <h3 className="text-base font-extrabold text-white">Identified Curriculum Deficits</h3>
+                <AlertTriangle className="h-5 w-5 text-amber-600" />
+                <h3 className="text-base font-black text-slate-900 dark:text-white">Identified Curriculum Deficits</h3>
               </div>
-              <div className="space-y-2 text-xs text-slate-300">
+              <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
                 {selectedCourse.attentionPoints.map((pt, i) => (
-                  <div key={i} className="p-3 rounded-xl bg-[#090e18] border border-amber-500/20 flex items-start gap-2.5">
-                    <AlertCircle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                  <div key={i} className="p-3 rounded-lg bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 flex items-start gap-2.5">
+                    <AlertCircle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
                     <span>{pt}</span>
                   </div>
                 ))}
@@ -208,20 +209,29 @@ export const TrainingScreen: React.FC = () => {
           </div>
 
           {/* Recommended Action Card */}
-          <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-[#0e1f2b] to-[#0a1520] border border-emerald-500/40 space-y-4 shadow-xl">
-            <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider block">Targeted Closed-Loop Policy Intervention</span>
-            <p className="text-sm font-extrabold text-white leading-relaxed">
+          <div className="p-6 rounded-xl bg-[#e8f3fc] dark:bg-[#0a66c2]/15 border border-[#0a66c2]/30 space-y-4 shadow-xs">
+            <span className="text-xs font-bold text-[#0a66c2] uppercase tracking-wider block">Targeted Closed-Loop Policy Intervention</span>
+            <p className="text-sm font-bold text-slate-900 dark:text-white leading-relaxed">
               {selectedCourse.recommendedAction}
             </p>
-            <div className="pt-2">
+            <div className="pt-2 flex items-center gap-3">
               <button
-                onClick={() => navigateToAction(selectedCourse.actionId)}
-                className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 px-5 py-2.5 text-xs font-bold text-white transition-all cursor-pointer inline-flex items-center gap-2 shadow-md shadow-emerald-600/20"
+                onClick={() => setIsInterventionDeployed(!isInterventionDeployed)}
+                className={`linkedin-btn-primary inline-flex items-center gap-2 cursor-pointer ${
+                  isInterventionDeployed
+                    ? 'bg-[#057642] hover:bg-[#046235]'
+                    : ''
+                }`}
               >
-                <Zap className="h-4 w-4 text-amber-300" />
-                <span>Deploy Policy Intervention</span>
+                <Zap className="h-4 w-4" />
+                <span>{isInterventionDeployed ? 'Intervention Active & Queued' : 'Deploy Policy Intervention'}</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </button>
+              {isInterventionDeployed && (
+                <span className="text-xs text-[#057642] font-bold animate-fade-in">
+                  ✓ Transmitted to NCVET & Sector Skill Council
+                </span>
+              )}
             </div>
           </div>
 
@@ -230,8 +240,8 @@ export const TrainingScreen: React.FC = () => {
         /* Courses Overview List */
         <div className="space-y-6">
           <div className="space-y-1">
-            <h1 className="text-2xl font-extrabold text-white">Qualification Packs & Training Outcomes</h1>
-            <p className="text-xs text-slate-400">Track qualification completion, verified employment, and curriculum alignment across national QP-NOS codes</p>
+            <h1 className="text-2xl font-black text-slate-900 dark:text-white">Qualification Packs & Training Outcomes</h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Track qualification completion, verified employment, and curriculum alignment across Maharashtra QP-NOS codes</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -239,49 +249,49 @@ export const TrainingScreen: React.FC = () => {
               <div
                 key={c.id}
                 onClick={() => setSelectedCourse(c)}
-                className="p-6 rounded-2xl bg-[#0e1626]/80 border border-slate-800/90 hover:border-emerald-500/40 transition-all duration-200 cursor-pointer space-y-4 shadow-lg backdrop-blur-md group hover:-translate-y-0.5"
+                className="linkedin-card p-6 bg-white dark:bg-[#1b1f23] hover:border-[#0a66c2]/50 transition-all duration-200 cursor-pointer space-y-4 shadow-xs hover:shadow-md group"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/25">
+                      <span className="text-[10px] font-mono font-bold text-[#0a66c2] bg-[#e8f3fc] dark:bg-[#0a66c2]/20 px-2 py-0.5 rounded border border-[#0a66c2]/30">
                         {c.qpCode}
                       </span>
-                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{c.sector}</span>
+                      <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{c.sector}</span>
                     </div>
-                    <h3 className="text-base font-extrabold text-white group-hover:text-emerald-400 transition-colors mt-1.5">{c.name}</h3>
+                    <h3 className="text-base font-black text-slate-900 dark:text-white group-hover:text-[#0a66c2] transition-colors mt-1.5">{c.name}</h3>
                   </div>
                   <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
                     c.status === 'good'
-                      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                      : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                      ? 'bg-emerald-50 text-[#057642] border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300'
+                      : 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300'
                   }`}>
                     {c.status === 'good' ? 'Benchmark Met' : 'Attention'}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-4 gap-2 text-center text-xs py-2.5 bg-[#090e18] rounded-xl border border-slate-800">
+                <div className="grid grid-cols-4 gap-2 text-center text-xs py-2.5 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200 dark:border-slate-700">
                   <div>
-                    <span className="text-[10px] text-slate-500 font-semibold block">Trainees</span>
-                    <span className="font-extrabold text-white mt-0.5 block">{c.trainees}</span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Trainees</span>
+                    <span className="font-bold text-slate-900 dark:text-white mt-0.5 block">{c.trainees}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 font-semibold block">Certified</span>
-                    <span className="font-extrabold text-cyan-400 mt-0.5 block">{c.certifiedPct}%</span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Certified</span>
+                    <span className="font-bold text-[#0a66c2] mt-0.5 block">{c.certifiedPct}%</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 font-semibold block">Placement</span>
-                    <span className="font-extrabold text-emerald-400 mt-0.5 block">{c.gotJobsPct}%</span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Placement</span>
+                    <span className="font-bold text-[#057642] mt-0.5 block">{c.gotJobsPct}%</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-500 font-semibold block">Retention</span>
-                    <span className="font-extrabold text-teal-300 mt-0.5 block">{c.retentionPct}%</span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Retention</span>
+                    <span className="font-bold text-teal-600 dark:text-teal-400 mt-0.5 block">{c.retentionPct}%</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-800/60">
-                  <span className="text-slate-400 text-[11px] truncate max-w-xs">{c.recommendedAction}</span>
-                  <span className="font-bold text-emerald-400 group-hover:translate-x-0.5 inline-flex items-center gap-1 transition-transform">
+                <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-100 dark:border-slate-800">
+                  <span className="text-slate-500 dark:text-slate-400 text-[11px] truncate max-w-xs">{c.recommendedAction}</span>
+                  <span className="font-bold text-[#0a66c2] group-hover:underline inline-flex items-center gap-1">
                     Diagnosis →
                   </span>
                 </div>

@@ -4,20 +4,36 @@
 
 @layer base {
   :root {
-    --bg-primary: #070b12;
-    --bg-surface: #0e1626;
-    --bg-card: rgba(15, 23, 42, 0.75);
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-accent: rgba(16, 185, 129, 0.3);
+    --bg-canvas: #f3f2ef;
+    --bg-surface: #ffffff;
+    --bg-card: #ffffff;
+    --text-primary: #191919;
+    --text-secondary: #5e5e5e;
+    --border-color: #e0dfdc;
+    --brand-blue: #0a66c2;
+    --brand-blue-hover: #004182;
+    --brand-blue-light: #e8f3fc;
+  }
+
+  .dark {
+    --bg-canvas: #1d2226;
+    --bg-surface: #242a30;
+    --bg-card: #1b1f23;
+    --text-primary: #f3f2ef;
+    --text-secondary: #c7c7c7;
+    --border-color: #38434f;
+    --brand-blue: #70b3ed;
+    --brand-blue-hover: #a3d0f4;
+    --brand-blue-light: rgba(112, 179, 237, 0.15);
   }
 
   body {
-    @apply bg-[#070b12] text-slate-100 font-sans antialiased overflow-x-hidden selection:bg-emerald-500 selection:text-white;
-    background-image: 
-      radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
-      radial-gradient(at 50% 100%, rgba(245, 158, 11, 0.03) 0px, transparent 50%);
-    background-attachment: fixed;
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Fira Sans", Ubuntu, Oxygen, "Oxygen Sans", Cantarell, "Droid Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Lucida Grande", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 }
 
@@ -27,99 +43,98 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #070b12;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #c7c7c7;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #999999;
 }
 
-/* Enterprise Glassmorphic & Surface Utilities */
-.glass-panel {
-  background: linear-gradient(135deg, rgba(17, 24, 39, 0.82) 0%, rgba(15, 23, 42, 0.65) 100%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45);
+/* LinkedIn Card Styling */
+.linkedin-card {
+  background-color: #ffffff;
+  border: 1px solid #e0dfdc;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-.glass-panel-elevated {
-  background: linear-gradient(135deg, rgba(26, 36, 56, 0.9) 0%, rgba(15, 23, 42, 0.8) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.05) inset;
-}
-
-.glass-panel-glow {
-  background: linear-gradient(135deg, rgba(16, 28, 48, 0.9) 0%, rgba(10, 18, 32, 0.8) 100%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  box-shadow: 0 0 30px -5px rgba(16, 185, 129, 0.18), 0 1px 2px 0 rgba(16, 185, 129, 0.2) inset;
+.dark .linkedin-card {
+  background-color: #1b1f23;
+  border-color: #38434f;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .metric-card {
   position: relative;
   overflow: hidden;
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   padding: 1.25rem;
-  background: linear-gradient(145deg, rgba(19, 29, 49, 0.7) 0%, rgba(11, 18, 33, 0.85) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(12px);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.35);
+  background-color: #ffffff;
+  border: 1px solid #e0dfdc;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease-in-out;
 }
 
 .metric-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.5), 0 0 15px -3px rgba(16, 185, 129, 0.12);
+  box-shadow: 0 0 0 1px rgba(10, 102, 194, 0.3), 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
 }
 
-/* Subtle Shimmer & Pulse effects */
-@keyframes subtleSheen {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
+.dark .metric-card {
+  background-color: #1b1f23;
+  border-color: #38434f;
 }
 
-.animate-sheen {
-  position: relative;
-  overflow: hidden;
-}
-
-.animate-sheen::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
-  transform: skewX(-20deg);
-  animation: subtleSheen 6s infinite;
-}
-
-/* Status indicator pulse ring */
-@keyframes ringPulse {
-  0% { transform: scale(0.95); opacity: 0.8; }
-  50% { transform: scale(1.3); opacity: 0; }
-  100% { transform: scale(0.95); opacity: 0; }
-}
-
-.status-pulse-ring {
-  position: relative;
-}
-
-.status-pulse-ring::after {
-  content: '';
-  position: absolute;
-  inset: -3px;
+/* LinkedIn Pill & Buttons */
+.linkedin-btn-primary {
+  background-color: #0a66c2;
+  color: #ffffff;
+  font-weight: 600;
   border-radius: 9999px;
-  border: 2px solid currentColor;
-  animation: ringPulse 2.5s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  padding: 0.4rem 1rem;
+  font-size: 0.8125rem;
+  transition: background-color 0.15s ease-in-out;
 }
 
+.linkedin-btn-primary:hover {
+  background-color: #004182;
+}
+
+.linkedin-btn-secondary {
+  background-color: transparent;
+  color: #0a66c2;
+  border: 1px solid #0a66c2;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.35rem 0.95rem;
+  font-size: 0.8125rem;
+  transition: all 0.15s ease-in-out;
+}
+
+.linkedin-btn-secondary:hover {
+  background-color: #e8f3fc;
+  border-width: 1.5px;
+}
+
+.linkedin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background-color: #e8f3fc;
+  color: #0a66c2;
+  border: 1px solid rgba(10, 102, 194, 0.25);
+}
+
+.dark .linkedin-badge {
+  background-color: rgba(112, 179, 237, 0.15);
+  color: #70b3ed;
+  border-color: rgba(112, 179, 237, 0.3);
+}

@@ -12,6 +12,28 @@ export default {
         mono: ['"JetBrains Mono"', 'monospace'],
       },
       colors: {
+        linkedin: {
+          50: '#f0f7fd',
+          100: '#e8f3fc',
+          200: '#cfe5f9',
+          300: '#a3d0f4',
+          400: '#70b3ed',
+          500: '#0a66c2',
+          600: '#004182',
+          700: '#003366',
+          800: '#00264d',
+          900: '#09223b',
+          canvas: '#f3f2ef',
+          surface: '#ffffff',
+          card: '#ffffff',
+          border: '#e0dfdc',
+          text: '#191919',
+          muted: '#666666',
+          darkBg: '#1d2226',
+          darkSurface: '#242a30',
+          darkCard: '#1b1f23',
+          darkBorder: '#38434f'
+        },
         brand: {
           50: '#ecfdf5',
           100: '#d1fae5',

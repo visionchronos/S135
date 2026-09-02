@@ -5,7 +5,7 @@ import {
   Clock, Award, MessageSquare, ChevronRight, Mic, QrCode, FileText, Check
 } from 'lucide-react';
 import { 
-  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer 
+  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid 
 } from 'recharts';
 import { useFilterStore } from '../../store/useFilterStore';
 import { api } from '../../services/api';
@@ -99,10 +99,12 @@ export const TraineesScreen: React.FC = () => {
   };
 
   const sampleWageProgression = [
-    { month: 'Day 0', wage: 17000 },
-    { month: 'Day 30', wage: 17800 },
-    { month: 'Day 90', wage: 19500 },
-    { month: 'Day 180', wage: 22000 }
+    { milestone: 'Day 0', wage: 17000, label: 'Entry Induction' },
+    { milestone: 'Day 30', wage: 17800, label: 'Probation Milestone' },
+    { milestone: 'Day 90', wage: 19500, label: 'Statutory Confirmation' },
+    { milestone: 'Day 180', wage: 22000, label: 'Mid-Year Merit Lift' },
+    { milestone: 'Day 270', wage: 23200, label: 'Skill Advancement' },
+    { milestone: 'Day 365', wage: 24500, label: 'Annual Appraisal (+44%)' }
   ];
 
   return (
@@ -116,87 +118,126 @@ export const TraineesScreen: React.FC = () => {
           <div className="flex items-center justify-between">
             <button
               onClick={() => setSelectedTrainee(null)}
-              className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors cursor-pointer px-3 py-1.5 rounded-lg bg-[#0e1626] border border-slate-800"
+              className="flex items-center gap-2 text-xs font-bold text-[#0a66c2] hover:bg-[#e8f3fc] dark:hover:bg-[#0a66c2]/20 transition-colors cursor-pointer px-3.5 py-1.5 rounded-full border border-[#0a66c2]/40"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>Back to Trainees Registry</span>
             </button>
 
-            <span className="text-xs text-slate-400 font-mono flex items-center gap-1.5">
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-mono flex items-center gap-1.5">
               <span>Verified Skill ID:</span>
-              <strong className="text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
+              <strong className="text-[#0a66c2] font-bold bg-[#e8f3fc] dark:bg-[#0a66c2]/20 px-2.5 py-0.5 rounded-full border border-[#0a66c2]/30">
                 {selectedTrainee.profile?.skill_id || selectedTrainee.skill_id}
               </strong>
             </span>
           </div>
 
-          {/* 1. Digital Skill Passport Header */}
-          <div className="p-6 sm:p-7 rounded-2xl border border-slate-800/90 bg-gradient-to-br from-[#0e1626] via-[#0b1322] to-[#070c16] space-y-6 shadow-xl shadow-black/40 relative overflow-hidden">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-6 relative z-10">
-              <div className="flex items-center gap-4">
-                <div className="h-16 w-16 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 p-0.5 shadow-lg shadow-emerald-600/20">
-                  <div className="w-full h-full bg-[#090e18] rounded-[14px] flex items-center justify-center text-xl font-black text-emerald-400">
-                    {(selectedTrainee.profile?.full_name || selectedTrainee.full_name || 'Arjun Kumar').split(' ').map(n => n[0]).join('')}
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h1 className="text-2xl font-black text-white">{selectedTrainee.profile?.full_name || selectedTrainee.full_name || 'Arjun Kumar'}</h1>
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/25">
-                      <ShieldCheck className="h-3 w-3" />
-                      Aadhaar Verified
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-300 font-medium mt-1">
-                    Solar Panel Installation Technician • {selectedTrainee.profile?.district || 'Ahmedabad'}, Gujarat
-                  </p>
-                  <p className="text-[11px] text-slate-500 font-mono mt-0.5">
-                    NSQF Level 4 • Certificate Hash: 0x8f3c...b12a • DPDP Consent Active
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                {getStatusBadge(selectedTrainee.profile?.current_status || selectedTrainee.current_status || 'EMPLOYED')}
+          {/* 1. Digital Skill Passport (LinkedIn Profile Header Card) */}
+          <div className="linkedin-card overflow-hidden bg-white dark:bg-[#1b1f23]">
+            {/* LinkedIn Cover Banner */}
+            <div className="h-28 sm:h-32 w-full bg-gradient-to-r from-[#004182] via-[#0a66c2] to-[#378fe9] relative">
+              <div className="absolute right-4 top-4">
+                <span className="linkedin-badge bg-white/90 text-[#0a66c2] backdrop-blur-xs font-bold shadow-xs">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  Aadhaar Verified DPDP Record
+                </span>
               </div>
             </div>
 
-            {/* 2. Visual Career Journey Line */}
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
-                  Longitudinal Milestones (NCrF Verified)
-                </span>
-                <span className="text-[11px] text-emerald-400 font-semibold">100% On-Track</span>
+            {/* Profile Avatar and Information */}
+            <div className="px-6 pb-6 pt-0 relative">
+              <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 -mt-12 sm:-mt-14 mb-4">
+                <div className="h-24 w-24 sm:h-28 sm:w-28 rounded-full border-4 border-white dark:border-[#1b1f23] bg-[#e8f3fc] dark:bg-[#283340] text-[#0a66c2] font-black text-2xl sm:text-3xl flex items-center justify-center shadow-md">
+                  {(selectedTrainee.profile?.full_name || selectedTrainee.full_name || 'Arjun Kumar').split(' ').map(n => n[0]).join('')}
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                  {getStatusBadge(selectedTrainee.profile?.current_status || selectedTrainee.current_status || 'EMPLOYED')}
+                  <button className="linkedin-btn-primary flex items-center gap-1.5">
+                    <Check className="h-3.5 w-3.5" />
+                    <span>Verified Passport</span>
+                  </button>
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs">
-                <div className="p-3 rounded-xl bg-[#090e18] border border-emerald-500/30">
-                  <span className="text-[10px] text-slate-500 font-semibold block">Stage 1</span>
-                  <span className="font-extrabold text-emerald-300 block mt-0.5">Training Completed</span>
-                  <span className="text-[10px] text-slate-400">92% Attendance</span>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-2xl font-black text-slate-900 dark:text-white">
+                    {selectedTrainee.profile?.full_name || selectedTrainee.full_name || 'Arjun Kumar'}
+                  </h1>
+                  <span className="h-5 w-5 rounded-full bg-[#0a66c2] text-white flex items-center justify-center text-[10px]">✓</span>
                 </div>
-                <div className="p-3 rounded-xl bg-[#090e18] border border-emerald-500/30">
-                  <span className="text-[10px] text-slate-500 font-semibold block">Stage 2</span>
-                  <span className="font-extrabold text-emerald-300 block mt-0.5">Certified (NSQF-4)</span>
-                  <span className="text-[10px] text-slate-400">Grade: A (88%)</span>
+                <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mt-1">
+                  Solar Panel Installation Technician • {selectedTrainee.profile?.district || 'Pune'} Cluster, Maharashtra
+                </p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  NSQF Level 4 • Certificate ID: MSDE-MH-2025-88419 • MSSDS & NITI Aayog Aspirational Beneficiary
+                </p>
+              </div>
+
+              {/* 2. Visual Career Journey Line: Training Tracking & Automated Follow-up Check-ins */}
+              <div className="space-y-4 pt-6 mt-6 border-t border-slate-100 dark:border-slate-800">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
+                    1. Training Tracking (Enrolment → Attendance → Skills → Certification)
+                  </span>
+                  <span className="text-xs text-[#0a66c2] font-bold">100% Completed</span>
                 </div>
-                <div className="p-3 rounded-xl bg-[#090e18] border border-emerald-500/30">
-                  <span className="text-[10px] text-slate-500 font-semibold block">Stage 3</span>
-                  <span className="font-extrabold text-emerald-300 block mt-0.5">Day 30 Placement</span>
-                  <span className="text-[10px] text-slate-400">Tata Power</span>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs">
+                  <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Step 1</span>
+                    <span className="font-bold text-slate-900 dark:text-white block mt-0.5">Enrolment</span>
+                    <span className="text-[10px] text-[#0a66c2] font-medium">Aadhaar Tokenized</span>
+                  </div>
+                  <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Step 2</span>
+                    <span className="font-bold text-slate-900 dark:text-white block mt-0.5">Attendance</span>
+                    <span className="text-[10px] text-[#057642] font-medium">92% Biometric</span>
+                  </div>
+                  <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Step 3</span>
+                    <span className="font-bold text-slate-900 dark:text-white block mt-0.5">Skills Mastered</span>
+                    <span className="text-[10px] text-[#0a66c2] font-medium">Solar PV NOS QP</span>
+                  </div>
+                  <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Step 4</span>
+                    <span className="font-bold text-slate-900 dark:text-white block mt-0.5">Certification</span>
+                    <span className="text-[10px] text-[#057642] font-medium">NSQF-4 (Grade A)</span>
+                  </div>
                 </div>
-                <div className="p-3 rounded-xl bg-[#090e18] border border-emerald-500/30">
-                  <span className="text-[10px] text-slate-500 font-semibold block">Stage 4</span>
-                  <span className="font-extrabold text-emerald-300 block mt-0.5">Day 90 OTP Verified</span>
-                  <span className="text-[10px] text-slate-400">Statutory 1-Click</span>
+
+                <div className="flex items-center justify-between pt-2">
+                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
+                    2. Automated Follow-ups (30, 90, 180 & 365-Day Longitudinal Check-ins)
+                  </span>
+                  <span className="text-xs text-[#0a66c2] font-bold">Active Cycle</span>
                 </div>
-                <div className="p-3 rounded-xl bg-[#090e18] border border-emerald-500/30 col-span-2 sm:col-span-1">
-                  <span className="text-[10px] text-slate-500 font-semibold block">Stage 5</span>
-                  <span className="font-extrabold text-emerald-300 block mt-0.5">Day 180 Retention</span>
-                  <span className="text-[10px] text-slate-400">+29% Wage Growth</span>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs">
+                  <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Day 30 Check-in</span>
+                    <span className="font-bold text-slate-900 dark:text-white block mt-0.5">Placement Start</span>
+                    <span className="text-[10px] text-slate-600 dark:text-slate-400">Tata Power (₹17k)</span>
+                  </div>
+                  <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Day 90 Check-in</span>
+                    <span className="font-bold text-slate-900 dark:text-white block mt-0.5">OTP Verified</span>
+                    <span className="text-[10px] text-[#057642] font-medium">Employer Confirmed</span>
+                  </div>
+                  <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Day 180 Check-in</span>
+                    <span className="font-bold text-slate-900 dark:text-white block mt-0.5">6M Retention</span>
+                    <span className="text-[10px] text-[#0a66c2] font-bold">+29% Wage (₹22k)</span>
+                  </div>
+                  <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Day 365 Check-in</span>
+                    <span className="font-bold text-slate-900 dark:text-white block mt-0.5">12M Career Growth</span>
+                    <span className="text-[10px] text-slate-600 dark:text-slate-400">Lead Technician</span>
+                  </div>
                 </div>
               </div>
+
             </div>
           </div>
 
@@ -204,79 +245,108 @@ export const TraineesScreen: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Current Status Card */}
-            <div className="p-6 rounded-2xl border border-slate-800/90 bg-[#0e1626]/80 backdrop-blur-md space-y-4 shadow-lg flex flex-col justify-between">
+            <div className="linkedin-card p-6 space-y-4 bg-white dark:bg-[#1b1f23] flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Verified Role</span>
-                  <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/25">
+                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Verified Role</span>
+                  <span className="linkedin-badge">
                     Tier 4 Multi-Signal
                   </span>
                 </div>
                 <div className="mt-2.5">
-                  <h3 className="text-lg font-extrabold text-white">Solar Panel Installation Lead</h3>
-                  <p className="text-sm font-bold text-emerald-400 mt-0.5">Tata Power Renewables Ltd</p>
-                  <p className="text-xs text-slate-400">Ahmedabad Cluster, Gujarat</p>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white">Solar Panel Installation Lead</h3>
+                  <p className="text-sm font-bold text-[#0a66c2] mt-0.5">Tata Power Renewables Ltd</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{selectedTrainee.profile?.district || 'Pune'} Cluster, Maharashtra</p>
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#090e18] border border-slate-800 space-y-2 text-xs">
+              <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Statutory Verification:</span>
-                  <span className="font-bold text-emerald-400 flex items-center gap-1">
+                  <span className="text-slate-500 dark:text-slate-400">Statutory Verification:</span>
+                  <span className="font-bold text-[#057642] flex items-center gap-1">
                     <Check className="h-3.5 w-3.5" /> 1-Click Employer OTP
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Confidence Score:</span>
-                  <span className="font-bold text-teal-300">96.4% Verified</span>
+                  <span className="text-slate-500 dark:text-slate-400">Confidence Score:</span>
+                  <span className="font-bold text-[#0a66c2]">96.4% Verified</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">DPDP Act Consent:</span>
-                  <span className="font-mono text-slate-300">Explicit (WhatsApp/SMS)</span>
+                  <span className="text-slate-500 dark:text-slate-400">DPDP Act Consent:</span>
+                  <span className="font-mono text-slate-700 dark:text-slate-300">Explicit (WhatsApp/SMS)</span>
                 </div>
               </div>
             </div>
 
             {/* Salary Progression Card */}
-            <div className="p-6 rounded-2xl border border-slate-800/90 bg-[#0e1626]/80 backdrop-blur-md space-y-4 shadow-lg">
+            <div className="linkedin-card p-6 space-y-4 bg-white dark:bg-[#1b1f23]">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Longitudinal Wage Velocity</span>
-                <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/25">
-                  +29.4% Growth
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Longitudinal Wage Velocity</span>
+                <span className="text-xs font-bold text-[#057642] bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/40">
+                  +44.1% 1-Year Career Lift
                 </span>
               </div>
 
               <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                <div className="p-3 rounded-xl bg-[#090e18] border border-slate-800">
-                  <span className="text-[10px] text-slate-500 font-semibold block">Entry Wage</span>
-                  <span className="text-base font-black text-slate-200">₹17,000</span>
+                <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Entry Wage</span>
+                  <span className="text-base font-black text-slate-800 dark:text-slate-200">₹17,000</span>
                 </div>
-                <div className="p-3 rounded-xl bg-[#090e18] border border-slate-800">
-                  <span className="text-[10px] text-slate-500 font-semibold block">Day 180 Wage</span>
-                  <span className="text-base font-black text-emerald-400">₹22,000</span>
+                <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Day 365 Wage</span>
+                  <span className="text-base font-black text-[#0a66c2]">₹24,500</span>
                 </div>
-                <div className="p-3 rounded-xl bg-[#090e18] border border-slate-800">
-                  <span className="text-[10px] text-slate-500 font-semibold block">Total Lift</span>
-                  <span className="text-base font-black text-teal-300">+₹5,000</span>
+                <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">Total Lift</span>
+                  <span className="text-base font-black text-[#057642]">+₹7,500</span>
                 </div>
               </div>
 
-              <div className="h-24 w-full pt-1">
+              <div className="h-32 w-full pt-1">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={sampleWageProgression} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                  <AreaChart data={sampleWageProgression} margin={{ top: 8, right: 10, left: -10, bottom: 0 }}>
                     <defs>
                       <linearGradient id="wageGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.4}/>
-                        <stop offset="95%" stopColor="#10b981" stopOpacity={0.0}/>
+                        <stop offset="0%" stopColor="#0a66c2" stopOpacity={0.3}/>
+                        <stop offset="60%" stopColor="#0a66c2" stopOpacity={0.08}/>
+                        <stop offset="100%" stopColor="#0a66c2" stopOpacity={0.0}/>
                       </linearGradient>
                     </defs>
-                    <XAxis dataKey="month" stroke="#64748b" fontSize={10} tickLine={false} />
-                    <YAxis stroke="#64748b" fontSize={10} tickLine={false} domain={[15000, 24000]} />
-                    <Tooltip
-                      contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '11px' }}
-                      formatter={(val: any) => [`₹${Number(val).toLocaleString()}`, 'Monthly Salary']}
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.6} vertical={false} />
+                    <XAxis dataKey="milestone" stroke="#64748b" fontSize={10} tickLine={false} axisLine={{ stroke: '#e2e8f0' }} />
+                    <YAxis 
+                      stroke="#64748b" 
+                      fontSize={10} 
+                      tickLine={false} 
+                      axisLine={false}
+                      domain={[15000, 26000]} 
+                      tickFormatter={(val) => `₹${(val / 1000).toFixed(0)}k`}
                     />
-                    <Area type="monotone" dataKey="wage" stroke="#10b981" strokeWidth={2.5} fillOpacity={1} fill="url(#wageGrad)" />
+                    <Tooltip
+                      content={({ active, payload }) => {
+                        if (active && payload && payload.length) {
+                          const data = payload[0].payload;
+                          return (
+                            <div className="rounded-lg border border-slate-200 bg-white dark:bg-[#1b1f23] p-2.5 shadow-lg text-xs space-y-1">
+                              <span className="font-bold text-slate-900 dark:text-white block">{data.milestone} • {data.label}</span>
+                              <div className="text-sm font-black text-[#0a66c2]">₹{data.wage.toLocaleString()}/mo</div>
+                              <span className="text-[10px] text-[#057642] font-semibold block">
+                                +{(((data.wage - 17000) / 17000) * 100).toFixed(1)}% vs Entry
+                              </span>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="wage" 
+                      stroke="#0a66c2" 
+                      strokeWidth={2.5} 
+                      fill="url(#wageGrad)"
+                      activeDot={{ r: 5, fill: '#0a66c2', stroke: '#ffffff', strokeWidth: 2 }}
+                    />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
@@ -287,36 +357,36 @@ export const TraineesScreen: React.FC = () => {
           {/* 4. Skills & Recommended Upgrades */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            <div className="p-6 rounded-2xl border border-slate-800/90 bg-[#0e1626]/80 backdrop-blur-md space-y-3 shadow-lg">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Competency Taxonomy</span>
+            <div className="linkedin-card p-6 space-y-3 bg-white dark:bg-[#1b1f23]">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Competency Taxonomy</span>
               <div className="flex flex-wrap gap-2 pt-1">
-                <span className="px-3 py-1.5 rounded-lg bg-[#090e18] border border-slate-800 text-xs font-semibold text-slate-200 flex items-center gap-1.5">
-                  <span>Solar PV Wiring</span> <Check className="h-3 w-3 text-emerald-400" />
+                <span className="px-3 py-1.5 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                  <span>Solar PV Wiring</span> <Check className="h-3 w-3 text-[#057642]" />
                 </span>
-                <span className="px-3 py-1.5 rounded-lg bg-[#090e18] border border-slate-800 text-xs font-semibold text-slate-200 flex items-center gap-1.5">
-                  <span>Grid-Tie Inverter Sync</span> <Check className="h-3 w-3 text-emerald-400" />
+                <span className="px-3 py-1.5 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                  <span>Grid-Tie Inverter Sync</span> <Check className="h-3 w-3 text-[#057642]" />
                 </span>
-                <span className="px-3 py-1.5 rounded-lg bg-[#090e18] border border-slate-800 text-xs font-semibold text-slate-200 flex items-center gap-1.5">
-                  <span>Electrical Safety NOS</span> <Check className="h-3 w-3 text-emerald-400" />
+                <span className="px-3 py-1.5 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                  <span>Electrical Safety NOS</span> <Check className="h-3 w-3 text-[#057642]" />
                 </span>
-                <span className="px-3 py-1.5 rounded-lg bg-[#090e18] border border-amber-500/30 text-xs font-semibold text-amber-300 flex items-center gap-1.5">
-                  <span>High-Voltage Battery Storage</span> <span className="text-[10px] bg-amber-500/20 px-1 rounded">Upgrade</span>
+                <span className="px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/40 text-xs font-semibold text-amber-800 dark:text-amber-300 flex items-center gap-1.5">
+                  <span>High-Voltage Battery Storage</span> <span className="text-[10px] bg-amber-200 dark:bg-amber-800 px-1 rounded">Upgrade</span>
                 </span>
               </div>
             </div>
 
-            <div className="p-6 rounded-2xl border border-slate-800/90 bg-[#0e1626]/80 backdrop-blur-md space-y-3 shadow-lg">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">AI Career Bridge Recommendation</span>
-              <p className="text-xs text-slate-300 leading-relaxed">
+            <div className="linkedin-card p-6 space-y-3 bg-white dark:bg-[#1b1f23]">
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">AI Career Bridge Recommendation</span>
+              <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
                 Trainee can advance to <strong>Commercial Rooftop Supervisor</strong> (+₹6,500 salary potential) by completing:
               </p>
-              <div className="space-y-1.5 text-xs text-slate-200 font-semibold">
+              <div className="space-y-1.5 text-xs text-slate-800 dark:text-slate-200 font-semibold">
                 <div className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#0a66c2]" />
                   <span>30-hr High-Voltage Lithium Storage Architecture</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#0a66c2]" />
                   <span>Client Site Safety Protocol Certification</span>
                 </div>
               </div>
@@ -325,31 +395,31 @@ export const TraineesScreen: React.FC = () => {
           </div>
 
           {/* 5. Next Follow-up (Conversational Flow) */}
-          <div className="p-6 rounded-2xl border border-slate-800/90 bg-[#0e1626]/80 backdrop-blur-md space-y-4 shadow-lg">
-            <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+          <div className="linkedin-card p-6 space-y-4 bg-white dark:bg-[#1b1f23]">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
-                <h3 className="text-sm font-extrabold text-white">Conversational Follow-up Parser (English & Hindi)</h3>
-                <span className="text-xs text-slate-400">Simulates WhatsApp/SMS survey responses processed via rule-based NLU</span>
+                <h3 className="text-sm font-black text-slate-900 dark:text-white">Conversational Follow-up Parser (English & Marathi / Hindi)</h3>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Simulates WhatsApp/SMS survey responses processed via rule-based NLU</span>
               </div>
-              <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-lg border border-emerald-500/25">
+              <span className="linkedin-badge">
                 Wave: 6-Month Milestone
               </span>
             </div>
 
             {!followupSubmitted ? (
-              <div className="p-5 rounded-xl bg-[#090e18] border border-slate-800 space-y-4">
+              <div className="p-5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-4">
                 {followupStep === 0 && (
                   <div className="space-y-3">
-                    <h4 className="text-sm font-extrabold text-white">How is your current job engagement?</h4>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">How is your current job engagement?</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-semibold">
                       {["Working full-time (Tata Power)", "Looking for role change", "Started own solar enterprise", "Enrolled in higher engineering"].map((opt) => (
                         <button
                           key={opt}
                           onClick={() => setFollowupAnswer(opt)}
-                          className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                          className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
                             followupAnswer === opt
-                              ? 'bg-emerald-600/20 text-emerald-300 border-emerald-500/50'
-                              : 'bg-[#0e1626] border-slate-800 text-slate-300 hover:border-slate-700'
+                              ? 'bg-[#e8f3fc] text-[#0a66c2] border-[#0a66c2] font-bold'
+                              : 'bg-white dark:bg-[#1b1f23] border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-[#0a66c2]'
                           }`}
                         >
                           {opt}
@@ -362,7 +432,7 @@ export const TraineesScreen: React.FC = () => {
                           if (followupAnswer) setFollowupStep(1);
                         }}
                         disabled={!followupAnswer}
-                        className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50 px-5 py-2 text-xs font-bold text-white transition-all cursor-pointer"
+                        className="linkedin-btn-primary disabled:opacity-50 cursor-pointer"
                       >
                         Next Step →
                       </button>
@@ -372,13 +442,13 @@ export const TraineesScreen: React.FC = () => {
 
                 {followupStep === 1 && (
                   <div className="space-y-3">
-                    <h4 className="text-sm font-extrabold text-white">Confirm current monthly salary range:</h4>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">Confirm current monthly salary range:</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-semibold">
                       {["₹20,000 - ₹25,000 per month", "₹18,000 - ₹20,000 per month", "Above ₹25,000 per month"].map((opt) => (
                         <button
                           key={opt}
                           onClick={() => setFollowupAnswer(opt)}
-                          className="p-3 rounded-xl border bg-[#0e1626] border-slate-800 text-slate-300 hover:border-emerald-500 text-left transition-all cursor-pointer"
+                          className="p-3 rounded-lg border bg-white dark:bg-[#1b1f23] border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-[#0a66c2] text-left transition-all cursor-pointer"
                         >
                           {opt}
                         </button>
@@ -387,29 +457,29 @@ export const TraineesScreen: React.FC = () => {
                     <div className="flex items-center justify-between pt-2">
                       <button
                         onClick={() => setFollowupStep(0)}
-                        className="text-xs font-bold text-slate-400 hover:text-white"
+                        className="text-xs font-bold text-slate-500 hover:text-slate-900 dark:hover:text-white"
                       >
                         ← Back
                       </button>
                       <button
                         onClick={() => setFollowupSubmitted(true)}
-                        className="rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 px-5 py-2 text-xs font-bold text-white transition-all cursor-pointer"
+                        className="linkedin-btn-primary cursor-pointer"
                       >
-                        Submit Follow-up Ledger Entry ✓
+                        Submit Follow-up Entry ✓
                       </button>
                     </div>
                   </div>
                 )}
               </div>
             ) : (
-              <div className="p-5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-xs text-emerald-300 flex items-center justify-between">
+              <div className="p-5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 text-xs text-emerald-800 dark:text-emerald-300 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-                  <span>Response validated by NLU and appended to verified longitudinal ledger.</span>
+                  <CheckCircle2 className="h-5 w-5 text-[#057642]" />
+                  <span>Response validated by NLU and appended to Maharashtra verified longitudinal ledger.</span>
                 </div>
                 <button
                   onClick={() => { setFollowupSubmitted(false); setFollowupStep(0); setFollowupAnswer(''); }}
-                  className="text-xs text-emerald-400 font-bold hover:underline cursor-pointer"
+                  className="text-xs text-[#0a66c2] font-bold hover:underline cursor-pointer"
                 >
                   Edit Response
                 </button>
@@ -425,18 +495,18 @@ export const TraineesScreen: React.FC = () => {
           {/* Header & Search */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1">
-              <h1 className="text-2xl font-extrabold text-white">Trainees Registry & Digital Passports</h1>
-              <p className="text-xs text-slate-400">Search and track longitudinal outcomes of certified candidates across all batches</p>
+              <h1 className="text-2xl font-black text-slate-900 dark:text-white">Trainees Registry & Digital Passports</h1>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Search and track longitudinal outcomes of certified candidates across Maharashtra</p>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             {/* Search Input */}
-            <div className="flex-1 flex items-center gap-2 rounded-xl bg-[#0e1626] border border-slate-800 px-4 py-2.5 text-xs text-slate-200 shadow-inner">
-              <Search className="h-4 w-4 text-slate-400" />
+            <div className="flex-1 flex items-center gap-2.5 rounded-full bg-[#edf3f8] dark:bg-[#242a30] border border-slate-300 dark:border-slate-600 px-4 py-2 text-xs text-slate-900 dark:text-slate-100">
+              <Search className="h-4 w-4 text-slate-500 shrink-0" />
               <input
                 type="text"
-                placeholder="Search by candidate name, Skill ID, or district..."
+                placeholder="Search candidate name, Skill ID, or Maharashtra district..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="bg-transparent focus:outline-none w-full placeholder-slate-500"
@@ -455,10 +525,10 @@ export const TraineesScreen: React.FC = () => {
                 <button
                   key={f.id}
                   onClick={() => setActiveFilter(f.id as any)}
-                  className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer shrink-0 ${
+                  className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer shrink-0 ${
                     activeFilter === f.id
-                      ? 'bg-emerald-600 text-white shadow-sm font-bold'
-                      : 'bg-[#0e1626] text-slate-400 hover:text-white border border-slate-800'
+                      ? 'bg-[#0a66c2] text-white shadow-xs font-bold'
+                      : 'bg-white dark:bg-[#242a30] text-slate-700 dark:text-slate-300 hover:border-[#0a66c2] border border-slate-300 dark:border-slate-600'
                   }`}
                 >
                   {f.label}
@@ -468,48 +538,48 @@ export const TraineesScreen: React.FC = () => {
           </div>
 
           {/* Desktop Table & Mobile Cards */}
-          <div className="rounded-2xl bg-[#0e1626]/80 border border-slate-800/90 shadow-xl overflow-hidden backdrop-blur-md">
+          <div className="linkedin-card overflow-hidden bg-white dark:bg-[#1b1f23]">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-800 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-[#090e18]">
-                    <th className="py-3.5 px-4">Beneficiary & Skill ID</th>
-                    <th className="py-3.5 px-4">Course Qualification</th>
-                    <th className="py-3.5 px-4">Outcome Status</th>
-                    <th className="py-3.5 px-4">Training Partner</th>
-                    <th className="py-3.5 px-4">Monthly Salary</th>
-                    <th className="py-3.5 px-4">Verification Confidence</th>
-                    <th className="py-3.5 px-4 text-right">Action</th>
+                  <tr className="border-b border-slate-200 dark:border-slate-700 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-slate-800/50">
+                    <th className="py-3 px-4">Beneficiary & Skill ID</th>
+                    <th className="py-3 px-4">Course Qualification</th>
+                    <th className="py-3 px-4">Outcome Status</th>
+                    <th className="py-3 px-4">Training Partner</th>
+                    <th className="py-3 px-4">Monthly Salary</th>
+                    <th className="py-3 px-4">Verification Tier</th>
+                    <th className="py-3 px-4 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {filteredTrainees.map((t) => (
                     <tr 
                       key={t.id}
                       onClick={() => navigateToTrainee(t.skill_id)}
-                      className="hover:bg-slate-900/60 transition-colors cursor-pointer group"
+                      className="hover:bg-[#f3f6f9] dark:hover:bg-slate-800/60 transition-colors cursor-pointer group"
                     >
                       <td className="py-3.5 px-4">
-                        <div className="font-extrabold text-white group-hover:text-emerald-400 transition-colors">{t.full_name}</div>
-                        <div className="text-[10px] font-mono text-slate-400">{t.skill_id}</div>
+                        <div className="font-bold text-slate-900 dark:text-white group-hover:text-[#0a66c2] transition-colors">{t.full_name}</div>
+                        <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">{t.skill_id}</div>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-300 font-medium">{t.course_name}</td>
+                      <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300 font-medium">{t.course_name}</td>
                       <td className="py-3.5 px-4">
                         {getStatusBadge(t.current_status)}
                       </td>
-                      <td className="py-3.5 px-4 text-slate-300 font-medium">
+                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-400 font-medium">
                         {t.provider_name.split(' ')[0]} Partner Unit
                       </td>
-                      <td className="py-3.5 px-4 font-bold text-white font-mono">
+                      <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white font-mono">
                         {t.current_wage > 0 ? `₹${t.current_wage.toLocaleString()}` : '-'}
                       </td>
-                      <td className="py-3.5 px-4 text-teal-300 text-[11px] font-semibold">
-                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded border border-teal-500/25">
+                      <td className="py-3.5 px-4 text-[11px] font-semibold">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0a66c2] bg-[#e8f3fc] dark:bg-[#0a66c2]/20 px-2 py-0.5 rounded-full border border-[#0a66c2]/30">
                           {t.verification_tier || 'Tier 3 (Verified)'}
                         </span>
                       </td>
                       <td className="py-3.5 px-4 text-right">
-                        <span className="text-xs font-bold text-emerald-400 group-hover:translate-x-0.5 inline-flex items-center gap-1 transition-transform">
+                        <span className="text-xs font-bold text-[#0a66c2] group-hover:underline inline-flex items-center gap-1">
                           Passport →
                         </span>
                       </td>

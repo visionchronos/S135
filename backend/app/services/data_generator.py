@@ -18,18 +18,22 @@ random.seed(42)
 np.random.seed(42)
 
 DISTRICTS_DATA = [
-    {"district": "Ahmedabad", "state": "Gujarat", "lat": 23.0225, "lng": 72.5714, "base_wage": 16500, "urban_ratio": 0.8},
-    {"district": "Surat", "state": "Gujarat", "lat": 21.1702, "lng": 72.8311, "base_wage": 17000, "urban_ratio": 0.85},
-    {"district": "Pune", "state": "Maharashtra", "lat": 18.5204, "lng": 73.8567, "base_wage": 18500, "urban_ratio": 0.85},
-    {"district": "Nagpur", "state": "Maharashtra", "lat": 21.1458, "lng": 79.0882, "base_wage": 15000, "urban_ratio": 0.65},
-    {"district": "Jaipur", "state": "Rajasthan", "lat": 26.9124, "lng": 75.7873, "base_wage": 14500, "urban_ratio": 0.60},
-    {"district": "Jodhpur", "state": "Rajasthan", "lat": 26.2389, "lng": 73.0243, "base_wage": 13500, "urban_ratio": 0.50},
-    {"district": "Lucknow", "state": "Uttar Pradesh", "lat": 26.8467, "lng": 80.9462, "base_wage": 14000, "urban_ratio": 0.70},
-    {"district": "Varanasi", "state": "Uttar Pradesh", "lat": 25.3176, "lng": 82.9739, "base_wage": 13000, "urban_ratio": 0.55},
-    {"district": "Bengaluru Urban", "state": "Karnataka", "lat": 12.9716, "lng": 77.5946, "base_wage": 21000, "urban_ratio": 0.95},
-    {"district": "Mysuru", "state": "Karnataka", "lat": 12.2958, "lng": 76.6394, "base_wage": 15500, "urban_ratio": 0.65},
-    {"district": "Bhopal", "state": "Madhya Pradesh", "lat": 23.2599, "lng": 77.4126, "base_wage": 13500, "urban_ratio": 0.60},
-    {"district": "Indore", "state": "Madhya Pradesh", "lat": 22.7196, "lng": 75.8577, "base_wage": 16000, "urban_ratio": 0.75}
+    # NITI Aayog Aspirational Districts (Maharashtra)
+    {"district": "Nandurbar", "state": "Maharashtra", "lat": 21.3739, "lng": 74.2403, "base_wage": 14500, "urban_ratio": 0.35, "is_aspirational": True, "niti_theme": "Tribal Renewable & Agri-Skilling"},
+    {"district": "Gadchiroli", "state": "Maharashtra", "lat": 20.1849, "lng": 80.0030, "base_wage": 14000, "urban_ratio": 0.30, "is_aspirational": True, "niti_theme": "Forestry & Mining Equipment Operations"},
+    {"district": "Washim", "state": "Maharashtra", "lat": 20.1110, "lng": 77.1352, "base_wage": 14800, "urban_ratio": 0.38, "is_aspirational": True, "niti_theme": "Agri-Logistics & Food Processing"},
+    {"district": "Dharashiv", "state": "Maharashtra", "lat": 18.1750, "lng": 76.0400, "base_wage": 15200, "urban_ratio": 0.40, "is_aspirational": True, "niti_theme": "Solar Energy & Light Engineering"},
+    
+    # Maharashtra State Skill Development Mission (MSSDS) Economic Clusters
+    {"district": "Pune", "state": "Maharashtra", "lat": 18.5204, "lng": 73.8567, "base_wage": 19500, "urban_ratio": 0.88, "is_aspirational": False, "niti_theme": "Automotive Mechatronics & IT-ITeS"},
+    {"district": "Mumbai Suburban", "state": "Maharashtra", "lat": 19.0760, "lng": 72.8777, "base_wage": 22000, "urban_ratio": 0.98, "is_aspirational": False, "niti_theme": "FinTech, Healthcare & BFSI"},
+    {"district": "Thane", "state": "Maharashtra", "lat": 19.2183, "lng": 72.9781, "base_wage": 19000, "urban_ratio": 0.85, "is_aspirational": False, "niti_theme": "Multi-modal Supply Chain & Warehousing"},
+    {"district": "Nagpur", "state": "Maharashtra", "lat": 21.1458, "lng": 79.0882, "base_wage": 16500, "urban_ratio": 0.70, "is_aspirational": False, "niti_theme": "MIHAN Aviation Logistics & Solar"},
+    {"district": "Nashik", "state": "Maharashtra", "lat": 19.9975, "lng": 73.7898, "base_wage": 16800, "urban_ratio": 0.65, "is_aspirational": False, "niti_theme": "Electrical Machinery & Precision CNC"},
+    {"district": "Chhatrapati Sambhajinagar", "state": "Maharashtra", "lat": 19.8762, "lng": 75.3433, "base_wage": 16200, "urban_ratio": 0.62, "is_aspirational": False, "niti_theme": "Auto Ancillary & Pharma Technology"},
+    {"district": "Solapur", "state": "Maharashtra", "lat": 17.6599, "lng": 75.9064, "base_wage": 15500, "urban_ratio": 0.58, "is_aspirational": False, "niti_theme": "Powerloom, Textiles & Garment Mfg"},
+    {"district": "Kolhapur", "state": "Maharashtra", "lat": 16.7050, "lng": 74.2433, "base_wage": 16500, "urban_ratio": 0.60, "is_aspirational": False, "niti_theme": "Foundry Engineering & Agro Machinery"},
+    {"district": "Amravati", "state": "Maharashtra", "lat": 20.9320, "lng": 77.7523, "base_wage": 15000, "urban_ratio": 0.55, "is_aspirational": False, "niti_theme": "Integrated Textile Park & Solar Tech"}
 ]
 
 SECTORS_DATA = [
@@ -46,8 +50,9 @@ SKILLS_POOL = [
     {"name": "Advanced Excel & MIS", "category": "Technical", "sector": "IT-ITeS", "demand": "HIGH"},
     {"name": "Business Communication", "category": "Soft Skill", "sector": "IT-ITeS", "demand": "HIGH"},
     
-    # Electronics
+    # Electronics & Solar
     {"name": "Solar PV Installation", "category": "Technical", "sector": "Green Energy / Solar", "demand": "HIGH"},
+    {"name": "Solar Micro-Grid Maintenance", "category": "Technical", "sector": "Green Energy / Solar", "demand": "HIGH"},
     {"name": "PCB Soldering & Rework", "category": "Technical", "sector": "Electronics & Hardware", "demand": "MEDIUM"},
     {"name": "Smart Meter Assembly", "category": "Technical", "sector": "Electronics & Hardware", "demand": "HIGH"},
     {"name": "EV Battery Maintenance", "category": "Technical", "sector": "Automotive", "demand": "HIGH"},
@@ -58,13 +63,15 @@ SKILLS_POOL = [
     {"name": "Phlebotomy & Sample Collection", "category": "Technical", "sector": "Healthcare", "demand": "MEDIUM"},
     {"name": "Patient Care & Empathy", "category": "Soft Skill", "sector": "Healthcare", "demand": "HIGH"},
     
-    # Automotive
+    # Automotive & Engineering
     {"name": "CNC Machine Operation", "category": "Technical", "sector": "Automotive", "demand": "HIGH"},
     {"name": "Automotive Mechatronics", "category": "Technical", "sector": "Automotive", "demand": "HIGH"},
+    {"name": "EV Powertrain & Diagnostics", "category": "Technical", "sector": "Automotive", "demand": "HIGH"},
     {"name": "Two-Wheeler Service & Repair", "category": "Technical", "sector": "Automotive", "demand": "MEDIUM"},
     
     # Retail & Logistics
     {"name": "Warehouse Management & Inventory", "category": "Domain", "sector": "Retail & Logistics", "demand": "HIGH"},
+    {"name": "Cold-Chain Logistics & Dispatch", "category": "Technical", "sector": "Retail & Logistics", "demand": "HIGH"},
     {"name": "Retail Sales & POS Systems", "category": "Domain", "sector": "Retail & Logistics", "demand": "MEDIUM"},
     {"name": "Customer Relationship Mgmt", "category": "Soft Skill", "sector": "Retail & Logistics", "demand": "HIGH"},
     
@@ -74,87 +81,88 @@ SKILLS_POOL = [
 ]
 
 COURSE_TEMPLATES = [
-    {"name": "Junior Software Developer", "sector": "IT-ITeS", "qp": "SSC/Q0508", "level": 4, "hours": 450, "wage": 22000, "placement_pot": 0.82, "retention_pot": 0.80},
-    {"name": "Domestic Data Entry Operator", "sector": "IT-ITeS", "qp": "SSC/Q2212", "level": 4, "hours": 350, "wage": 12500, "placement_pot": 0.44, "retention_pot": 0.32}, # Intentional mismatch
-    {"name": "Solar PV Installer (Suryamitra)", "sector": "Green Energy / Solar", "qp": "SGJ/Q0101", "level": 4, "hours": 400, "wage": 18500, "placement_pot": 0.88, "retention_pot": 0.82},
-    {"name": "General Duty Assistant (GDA)", "sector": "Healthcare", "qp": "HSS/Q5101", "level": 4, "hours": 480, "wage": 16500, "placement_pot": 0.86, "retention_pot": 0.76},
-    {"name": "CNC Operator - Turning", "sector": "Automotive", "qp": "ASC/Q3501", "level": 4, "hours": 450, "wage": 19500, "placement_pot": 0.85, "retention_pot": 0.84},
-    {"name": "EV Service Technician", "sector": "Automotive", "qp": "ASC/Q1424", "level": 5, "hours": 500, "wage": 24000, "placement_pot": 0.90, "retention_pot": 0.88},
-    {"name": "Warehouse Associate", "sector": "Retail & Logistics", "qp": "LSC/Q0101", "level": 3, "hours": 320, "wage": 15000, "placement_pot": 0.78, "retention_pot": 0.65},
-    {"name": "Sewing Machine Operator", "sector": "Apparel & Textiles", "qp": "AMH/Q0301", "level": 4, "hours": 300, "wage": 13500, "placement_pot": 0.68, "retention_pot": 0.52}
+    {"name": "Junior Software Developer", "sector": "IT-ITeS", "qp": "SSC/Q0508", "level": 4, "hours": 450, "wage": 24000, "placement_pot": 0.84, "retention_pot": 0.82},
+    {"name": "Domestic Data Entry Operator", "sector": "IT-ITeS", "qp": "SSC/Q2212", "level": 4, "hours": 350, "wage": 13500, "placement_pot": 0.46, "retention_pot": 0.35},
+    {"name": "Solar PV Installer (Suryamitra)", "sector": "Green Energy / Solar", "qp": "SGJ/Q0101", "level": 4, "hours": 400, "wage": 19500, "placement_pot": 0.89, "retention_pot": 0.84},
+    {"name": "General Duty Assistant (GDA)", "sector": "Healthcare", "qp": "HSS/Q5101", "level": 4, "hours": 480, "wage": 17500, "placement_pot": 0.87, "retention_pot": 0.78},
+    {"name": "CNC Operator - Turning & Milling", "sector": "Automotive", "qp": "ASC/Q3501", "level": 4, "hours": 450, "wage": 21000, "placement_pot": 0.86, "retention_pot": 0.85},
+    {"name": "EV Powertrain & Battery Technician", "sector": "Automotive", "qp": "ASC/Q1424", "level": 5, "hours": 500, "wage": 26000, "placement_pot": 0.92, "retention_pot": 0.90},
+    {"name": "Warehouse & Cold-Chain Associate", "sector": "Retail & Logistics", "qp": "LSC/Q0101", "level": 3, "hours": 320, "wage": 16500, "placement_pot": 0.80, "retention_pot": 0.68},
+    {"name": "Industrial Garment Sewing Operator", "sector": "Apparel & Textiles", "qp": "AMH/Q0301", "level": 4, "hours": 300, "wage": 14500, "placement_pot": 0.70, "retention_pot": 0.55}
 ]
 
 def seed_database_if_empty(db: Session, force_reset: bool = False, count: int = 10000):
     existing_trainees = db.query(Trainee).count()
-    # Skip seeding if ANY trainees already exist (avoids duplicate unique-key crash on Render restarts)
     if existing_trainees >= 1 and not force_reset:
         print(f"[DataGen] Database already contains {existing_trainees} trainees. Skipping generation.")
         return
 
-    print(f"[DataGen] Seeding database with {count} trainees and rich longitudinal ecosystem...")
+    print(f"[DataGen] Seeding database with {count} trainees for Maharashtra NITI Aayog & MSSDS ecosystem...")
 
     # 1. Create Default Users
     admin_user = User(
         id=str(uuid.uuid4()),
         email="admin@outcome.gov.in",
         hashed_password="pbkdf2:sha256:600000$demo$hash",
-        full_name="National Outcome Director",
+        full_name="Maharashtra State Skill Outcome Director",
         role="policy_maker"
     )
     db.add(admin_user)
 
     # 2. Consent Policies
     policies = [
-        ConsentPolicy(purpose_code="EMPLOYMENT_TRACKING", title="Longitudinal Employment Tracking", description="Allows the ministry and verification partners to track employment transitions and wage progression post-certification.", data_retention_years=5, is_mandatory=True),
+        ConsentPolicy(purpose_code="EMPLOYMENT_TRACKING", title="Longitudinal Employment Tracking", description="Allows MSSDS and verification partners to track employment transitions and wage progression post-certification under DPDP Act.", data_retention_years=5, is_mandatory=True),
         ConsentPolicy(purpose_code="EMPLOYER_VERIFY", title="Direct Employer Verification", description="Authorizes authorized team to contact declared employers to verify tenure and designation.", data_retention_years=5, is_mandatory=False),
-        ConsentPolicy(purpose_code="POLICY_ANALYTICS", title="Anonymized Policy & Macro Analytics", description="Aggregates outcome data to compute district skill demand and programme ROI.", data_retention_years=10, is_mandatory=True),
+        ConsentPolicy(purpose_code="POLICY_ANALYTICS", title="Anonymized Policy & Macro Analytics", description="Aggregates outcome data to compute NITI Aayog district skill demand and programme ROI.", data_retention_years=10, is_mandatory=True),
         ConsentPolicy(purpose_code="JOB_MATCHING", title="Proactive Job Opportunity Matching", description="Permits verified job aggregators to share relevant higher-wage vacancies if trainee is unemployed.", data_retention_years=3, is_mandatory=False)
     ]
     for p in policies:
         db.add(p)
 
-    # 3. Scheme & Programmes
+    # 3. Scheme & Programmes (Maharashtra MSSDS & NITI Aayog Aspirational District Skilling)
     pmkvy = Scheme(
-        code="PMKVY-4.0",
-        name="Pradhan Mantri Kaushal Vikas Yojana 4.0",
-        ministry="Ministry of Skill Development & Entrepreneurship",
-        budget_crores=4500.0,
-        target_beneficiaries=300000
+        code="MSSDS-PMKUVA-2025",
+        name="Pramod Mahajan Kaushalya Uddhyamita Vikas Abhiyan & PMKVY 4.0",
+        ministry="Skill Development, Employment & Entrepreneurship Department (Govt of Maharashtra)",
+        budget_crores=5800.0,
+        target_beneficiaries=450000
     )
     db.add(pmkvy)
     db.flush()
 
-    prog_stt = Programme(scheme_id=pmkvy.id, code="STT", name="Short Term Training Programme", target_sector="Multi-Sector")
-    prog_appr = Programme(scheme_id=pmkvy.id, code="NAPS", name="National Apprenticeship Promotion Scheme", target_sector="Manufacturing & Logistics")
+    prog_stt = Programme(scheme_id=pmkvy.id, code="MSSDS-STT", name="Maharashtra Short Term Training (STT)", target_sector="Multi-Sector & Aspirational Districts")
+    prog_appr = Programme(scheme_id=pmkvy.id, code="NAPS-MAHA", name="National Apprenticeship Promotion Scheme (Maharashtra Cluster)", target_sector="Automotive, Solar & Logistics")
     db.add_all([prog_stt, prog_appr])
     db.flush()
 
-    # 4. Providers & Training Centres (20 Providers across 12 Districts)
+    # 4. Providers & Training Centres (Accredited Maharashtra Training Partners)
     providers = []
     centres = []
     provider_names = [
-        "AURA Skill Development Institute", "TechnoServe Skilling India", "Centum Learning Ltd",
-        "Apollo MedSkills Foundation", "Schneider Electric Training Centre", "Tata STRIVE Skills",
-        "Orion Edutech Pvt Ltd", "IL&FS Skills Development", "L&T Construction Skills Institute",
-        "GMR Varalakshmi Foundation", "TeamLease Skills University", "NIIT Foundation",
-        "Skilldom Tech Academies", "Gramin Vikas Kaushal Kendra", "Apex Tech Vocational Institute",
-        "Pratham Education Foundation Skills", "Datapro Computers Skills", "Rooman Technologies",
-        "Empower Pragati Vocational", "Vision India Services Skilling"
+        "Maharashtra State Skill Development Society (MSSDS)", "Tata STRIVE Skill Development Pune",
+        "L&T Construction Skills Institute (CSTI Panvel)", "Symbiosis Skills & Professional University (SSPU)",
+        "Centum Learning Center Nagpur", "Don Bosco Tech Society (Chhatrapati Sambhajinagar)",
+        "Pratham Vocational Institute (Washim & Nandurbar)", "Apollo MedSkills Institute Mumbai",
+        "TechnoServe Maharashtra Skilling", "Government ITI Aundh (Pune)",
+        "Government ITI Nagpur (MIHAN Cluster)", "Government ITI Nashik (Auto Hub)",
+        "Government ITI Nandurbar (Tribal Skill Centre)", "Government ITI Gadchiroli (Aspirational)",
+        "Orion Edutech Solapur Center", "TeamLease Skills Hub Thane",
+        "Schneider Electric Center Amravati", "Gramin Vikas Kaushal Kendra Dharashiv",
+        "Apex Tech Institute Kolhapur", "Vision India Vocational Thane"
     ]
 
     for i, name in enumerate(provider_names):
         dist_info = DISTRICTS_DATA[i % len(DISTRICTS_DATA)]
-        # Add anomaly for Provider #14 (Suspiciously inflated reported placement)
         data_quality = 74.0 if i == 14 else round(random.uniform(88.0, 98.0), 1)
         prov = Provider(
-            code=f"TP-2026-{1000+i}-{uuid.uuid4().hex[:4]}",
+            code=f"TP-MH-{1000+i}-{uuid.uuid4().hex[:4]}",
             name=name,
-            category="NSDC Partner" if i % 2 == 0 else "State Skill Mission Partner",
+            category="State Skill Mission Partner" if i % 2 == 0 else "NSDC Partner",
             state=dist_info["state"],
             headquarters=dist_info["district"],
-            contact_email=f"contact@{name.lower().replace(' ', '').replace('&', '')}.org",
+            contact_email=f"contact@{name.lower().replace(' ', '').replace('&', '').replace('(', '').replace(')', '')[:20]}.org.in",
             contact_phone=f"+91 98{random.randint(10000000, 99999999)}",
-            rating=round(random.uniform(3.8, 4.9), 1),
+            rating=round(random.uniform(3.9, 4.9), 1),
             data_quality_score=data_quality
         )
         providers.append(prov)
@@ -162,17 +170,17 @@ def seed_database_if_empty(db: Session, force_reset: bool = False, count: int = 
     db.flush()
 
     for i, prov in enumerate(providers):
-        for c_idx in range(2): # 2 centres per provider = 40 centres
+        for c_idx in range(2):
             dist_info = DISTRICTS_DATA[(i * 2 + c_idx) % len(DISTRICTS_DATA)]
             centre = TrainingCentre(
                 provider_id=prov.id,
-                code=f"TC-{prov.code}-{c_idx+1}-{uuid.uuid4().hex[:4]}",
+                code=f"TC-MH-{prov.code[-6:]}-{c_idx+1}",
                 name=f"{prov.name} - {dist_info['district']} Center",
                 state=dist_info["state"],
                 district=dist_info["district"],
-                pincode=f"{random.randint(300000, 699999)}",
-                latitude=dist_info["lat"] + random.uniform(-0.05, 0.05),
-                longitude=dist_info["lng"] + random.uniform(-0.05, 0.05)
+                pincode=f"41{random.randint(1000, 9999)}",
+                latitude=dist_info["lat"] + random.uniform(-0.03, 0.03),
+                longitude=dist_info["lng"] + random.uniform(-0.03, 0.03)
             )
             centres.append(centre)
             db.add(centre)
@@ -217,13 +225,16 @@ def seed_database_if_empty(db: Session, force_reset: bool = False, count: int = 
     # 6. Employers & Job Postings (100 Employers across districts)
     employers = []
     emp_names_prefixes = [
-        ("Apex Green Solutions", "Green Energy / Solar"), ("Tata Power Renewables", "Green Energy / Solar"),
-        ("Infosys BPM Services", "IT-ITeS"), ("Wipro BPS Hub", "IT-ITeS"), ("Tech Mahindra Business", "IT-ITeS"),
-        ("Apollo HealthCity", "Healthcare"), ("Fortis Healthcare Logistics", "Healthcare"), ("Max Hospital Network", "Healthcare"),
-        ("Tata Motors Component Works", "Automotive"), ("Bharat Forge Auto Parts", "Automotive"), ("Mahindra Auto Hub", "Automotive"),
-        ("Reliance Retail Hub", "Retail & Logistics"), ("Flipkart Logistics Node", "Retail & Logistics"), ("Amazon Delivery Station", "Retail & Logistics"),
-        ("Arvind Textile Mills", "Apparel & Textiles"), ("Shahi Exports Garments", "Apparel & Textiles"), ("Raymond Apparel Node", "Apparel & Textiles"),
-        ("Havells Electronics", "Electronics & Hardware"), ("Voltas Precision Works", "Electronics & Hardware"), ("Luminous Power Systems", "Green Energy / Solar")
+        ("Tata Motors Ltd", "Automotive"), ("Bharat Forge Precision Works", "Automotive"),
+        ("Mahindra & Mahindra Auto", "Automotive"), ("Tata Power Renewables", "Green Energy / Solar"),
+        ("SolarEdge Tech Maharashtra", "Green Energy / Solar"), ("Cipla LifeSciences", "Healthcare"),
+        ("Lupin Pharma Technologies", "Healthcare"), ("Apollo SuperSpeciality", "Healthcare"),
+        ("Sahyadri Healthcare Logistics", "Healthcare"), ("Tata Consultancy Services", "IT-ITeS"),
+        ("Tech Mahindra Innovation", "IT-ITeS"), ("Infosys BPM Pune", "IT-ITeS"),
+        ("DMart Supply Chain Hub", "Retail & Logistics"), ("Reliance Multi-modal Logistics", "Retail & Logistics"),
+        ("Mahindra Logistics Node", "Retail & Logistics"), ("Raymond Textile Mills", "Apparel & Textiles"),
+        ("Shahi Exports Garment Division", "Apparel & Textiles"), ("Bombay Rayon Fashions", "Apparel & Textiles"),
+        ("L&T Electrical & Automation", "Electronics & Hardware"), ("Schneider Electric Manufacturing", "Electronics & Hardware")
     ]
 
     for e_i in range(100):
@@ -293,9 +304,9 @@ def seed_database_if_empty(db: Session, force_reset: bool = False, count: int = 
     # 8. Trainees & Longitudinal Outcomes (Generating `count` trainees)
     print(f"[DataGen] Generating {count} trainees with full longitudinal lifecycles...")
     
-    first_names_m = ["Aarav", "Rohan", "Vikram", "Amit", "Rahul", "Deepak", "Suresh", "Manish", "Prakash", "Gaurav", "Sunil", "Anand"]
-    first_names_f = ["Priya", "Ananya", "Sneha", "Pooja", "Kavita", "Ritu", "Sunita", "Meera", "Neha", "Divya", "Swati", "Aarti"]
-    last_names = ["Sharma", "Verma", "Patel", "Singh", "Yadav", "Joshi", "Gupta", "Deshmukh", "Kulkarni", "Chauhan", "Rao", "Nair"]
+    first_names_m = ["Aarav", "Rohan", "Aditya", "Amit", "Rahul", "Omkar", "Ganesh", "Prathamesh", "Sanket", "Swapnil", "Tushar", "Saurabh", "Abhishek", "Nikhil", "Akshay"]
+    first_names_f = ["Priya", "Ananya", "Sneha", "Pooja", "Tanvi", "Shweta", "Rutuja", "Ankita", "Ashwini", "Sayali", "Neha", "Aarti", "Shraddha", "Komal", "Vaishnavi"]
+    last_names = ["Patil", "Deshmukh", "Kulkarni", "Shinde", "Jadhav", "Gaikwad", "Pawar", "Chavan", "More", "Joshi", "Wagh", "Sawant", "Raut", "Thorat", "Kadam", "Bhosale"]
     
     trainees_to_add = []
     

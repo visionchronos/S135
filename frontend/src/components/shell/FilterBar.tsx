@@ -11,8 +11,9 @@ export const FilterBar: React.FC = () => {
   const activeCount = getActiveFilterCount();
 
   const districts = [
-    'ALL', 'Ahmedabad', 'Surat', 'Pune', 'Bengaluru', 'Hyderabad', 
-    'Jaipur', 'Lucknow', 'Bhopal', 'Patna', 'Ranchi', 'Bhubaneswar', 'Guwahati'
+    'ALL', 'Pune', 'Mumbai Suburban', 'Thane', 'Nagpur', 'Nashik', 
+    'Chhatrapati Sambhajinagar', 'Solapur', 'Kolhapur', 'Amravati', 
+    'Nandurbar', 'Gadchiroli', 'Washim', 'Dharashiv'
   ];
 
   const sectors = [
@@ -36,17 +37,17 @@ export const FilterBar: React.FC = () => {
   ];
 
   return (
-    <div className="w-full border-b border-slate-800/80 bg-[#070b12]/80 backdrop-blur-md px-4 sm:px-6 py-2.5">
+    <div className="w-full border-b border-[#e0dfdc] dark:border-[#38434f] bg-white dark:bg-[#1b1f23] px-4 sm:px-6 py-2 transition-colors shadow-2xs">
       <div className="flex flex-wrap items-center justify-between gap-3 max-w-7xl mx-auto">
         
         {/* Filter Controls Row */}
         <div className="flex flex-wrap items-center gap-2">
           
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-400 mr-1.5">
-            <Filter className="h-3.5 w-3.5 text-emerald-400" />
+          <div className="flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 mr-1">
+            <Filter className="h-3.5 w-3.5 text-[#0a66c2]" />
             <span>Cohorts:</span>
             {activeCount > 0 && (
-              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-500/20 px-1.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
+              <span className="flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-[#0a66c2] px-1.5 text-[10px] font-bold text-white">
                 {activeCount}
               </span>
             )}
@@ -57,15 +58,15 @@ export const FilterBar: React.FC = () => {
             <select
               value={district}
               onChange={(e) => setFilter('district', e.target.value)}
-              className="appearance-none rounded-lg border border-slate-800/90 bg-[#0e1626] px-3 py-1.5 pr-7 text-xs font-medium text-slate-200 hover:border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer shadow-sm transition-colors"
+              className="appearance-none rounded-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#242a30] px-3.5 py-1.5 pr-7 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-[#0a66c2] focus:outline-none focus:border-[#0a66c2] cursor-pointer shadow-2xs transition-colors"
             >
               {districts.map((d) => (
                 <option key={d} value={d}>
-                  {d === 'ALL' ? 'District: All (12)' : `District: ${d}`}
+                  {d === 'ALL' ? 'District: All Maharashtra' : `District: ${d}`}
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-2.5 h-3 w-3 text-slate-400" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-2.5 h-3 w-3 text-slate-400" />
           </div>
 
           {/* Sector Dropdown */}
@@ -73,7 +74,7 @@ export const FilterBar: React.FC = () => {
             <select
               value={sector}
               onChange={(e) => setFilter('sector', e.target.value)}
-              className="appearance-none rounded-lg border border-slate-800/90 bg-[#0e1626] px-3 py-1.5 pr-7 text-xs font-medium text-slate-200 hover:border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer shadow-sm transition-colors"
+              className="appearance-none rounded-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#242a30] px-3.5 py-1.5 pr-7 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-[#0a66c2] focus:outline-none focus:border-[#0a66c2] cursor-pointer shadow-2xs transition-colors"
             >
               {sectors.map((s) => (
                 <option key={s} value={s}>
@@ -81,7 +82,7 @@ export const FilterBar: React.FC = () => {
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-2.5 h-3 w-3 text-slate-400" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-2.5 h-3 w-3 text-slate-400" />
           </div>
 
           {/* Provider Dropdown */}
@@ -89,7 +90,7 @@ export const FilterBar: React.FC = () => {
             <select
               value={provider}
               onChange={(e) => setFilter('provider', e.target.value)}
-              className="appearance-none rounded-lg border border-slate-800/90 bg-[#0e1626] px-3 py-1.5 pr-7 text-xs font-medium text-slate-200 hover:border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer max-w-[170px] truncate shadow-sm transition-colors"
+              className="appearance-none rounded-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#242a30] px-3.5 py-1.5 pr-7 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-[#0a66c2] focus:outline-none focus:border-[#0a66c2] cursor-pointer max-w-[170px] truncate shadow-2xs transition-colors"
             >
               {providers.map((p) => (
                 <option key={p} value={p}>
@@ -97,7 +98,7 @@ export const FilterBar: React.FC = () => {
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-2.5 h-3 w-3 text-slate-400" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-2.5 h-3 w-3 text-slate-400" />
           </div>
 
           {/* Gender Dropdown */}
@@ -105,7 +106,7 @@ export const FilterBar: React.FC = () => {
             <select
               value={gender}
               onChange={(e) => setFilter('gender', e.target.value)}
-              className="appearance-none rounded-lg border border-slate-800/90 bg-[#0e1626] px-3 py-1.5 pr-7 text-xs font-medium text-slate-200 hover:border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer shadow-sm transition-colors"
+              className="appearance-none rounded-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#242a30] px-3.5 py-1.5 pr-7 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-[#0a66c2] focus:outline-none focus:border-[#0a66c2] cursor-pointer shadow-2xs transition-colors"
             >
               {genders.map((g) => (
                 <option key={g} value={g}>
@@ -113,7 +114,7 @@ export const FilterBar: React.FC = () => {
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-2.5 h-3 w-3 text-slate-400" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-2.5 h-3 w-3 text-slate-400" />
           </div>
 
           {/* Category Dropdown */}
@@ -121,7 +122,7 @@ export const FilterBar: React.FC = () => {
             <select
               value={socialCategory}
               onChange={(e) => setFilter('socialCategory', e.target.value)}
-              className="appearance-none rounded-lg border border-slate-800/90 bg-[#0e1626] px-3 py-1.5 pr-7 text-xs font-medium text-slate-200 hover:border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer shadow-sm transition-colors"
+              className="appearance-none rounded-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#242a30] px-3.5 py-1.5 pr-7 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-[#0a66c2] focus:outline-none focus:border-[#0a66c2] cursor-pointer shadow-2xs transition-colors"
             >
               {categories.map((c) => (
                 <option key={c} value={c}>
@@ -129,7 +130,7 @@ export const FilterBar: React.FC = () => {
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-2.5 h-3 w-3 text-slate-400" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-2.5 h-3 w-3 text-slate-400" />
           </div>
 
           {/* Date Range Dropdown */}
@@ -137,7 +138,7 @@ export const FilterBar: React.FC = () => {
             <select
               value={dateRange}
               onChange={(e) => setFilter('dateRange', e.target.value)}
-              className="appearance-none rounded-lg border border-slate-800/90 bg-[#0e1626] px-3 py-1.5 pr-7 text-xs font-medium text-slate-200 hover:border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer shadow-sm transition-colors"
+              className="appearance-none rounded-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-[#242a30] px-3.5 py-1.5 pr-7 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-[#0a66c2] focus:outline-none focus:border-[#0a66c2] cursor-pointer shadow-2xs transition-colors"
             >
               {dateRanges.map((d) => (
                 <option key={d.value} value={d.value}>
@@ -145,7 +146,7 @@ export const FilterBar: React.FC = () => {
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2 top-2.5 h-3 w-3 text-slate-400" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-2.5 h-3 w-3 text-slate-400" />
           </div>
 
         </div>
@@ -154,10 +155,10 @@ export const FilterBar: React.FC = () => {
         {activeCount > 0 && (
           <button
             onClick={resetFilters}
-            className="flex items-center gap-1.5 text-xs font-semibold text-rose-400 hover:text-rose-300 transition-colors cursor-pointer px-2 py-1 rounded-md hover:bg-rose-500/10"
+            className="flex items-center gap-1.5 text-xs font-bold text-[#0a66c2] hover:bg-[#e8f3fc] dark:hover:bg-[#0a66c2]/20 transition-colors cursor-pointer px-3 py-1 rounded-full"
           >
             <RotateCcw className="h-3 w-3" />
-            <span>Reset filters</span>
+            <span>Reset</span>
           </button>
         )}
 

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 export type UserRole = 'Government' | 'Provider' | 'Trainee' | 'Employer' | 'Admin' | 'Demo';
-export type PrimaryNavTab = 'home' | 'trainees' | 'training' | 'jobs' | 'insights' | 'actions' | 'settings';
+export type PrimaryNavTab = 'home' | 'trainees' | 'training' | 'jobs';
 
 export interface FilterState {
   district: string;
@@ -16,7 +16,6 @@ export interface FilterState {
   activeNavTab: PrimaryNavTab;
   selectedTraineeId: string | null;
   selectedCourseId: string | null;
-  selectedActionId: string | null;
   sidebarCollapsed: boolean;
   searchQuery: string;
   language: 'en' | 'hi';
@@ -30,7 +29,6 @@ export interface FilterState {
   setActiveNavTab: (tab: PrimaryNavTab) => void;
   navigateToTrainee: (traineeId: string) => void;
   navigateToCourse: (courseId: string) => void;
-  navigateToAction: (actionId: string) => void;
   setSidebarCollapsed: (collapsed: boolean) => void;
   toggleSidebar: () => void;
   setSearchQuery: (query: string) => void;
@@ -64,11 +62,10 @@ export const useFilterStore = create<FilterState>((set, get) => ({
   activeNavTab: 'home',
   selectedTraineeId: 'SKILL-IND-2025-100000',
   selectedCourseId: null,
-  selectedActionId: null,
   sidebarCollapsed: false,
   searchQuery: '',
   language: 'en',
-  theme: 'dark',
+  theme: 'light',
 
   setFilter: (key, value) => set({ [key]: value }),
   
@@ -102,7 +99,6 @@ export const useFilterStore = create<FilterState>((set, get) => ({
 
   navigateToTrainee: (traineeId) => set({ activeNavTab: 'trainees', selectedTraineeId: traineeId }),
   navigateToCourse: (courseId) => set({ activeNavTab: 'training', selectedCourseId: courseId }),
-  navigateToAction: (actionId) => set({ activeNavTab: 'actions', selectedActionId: actionId }),
 
   setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
 
